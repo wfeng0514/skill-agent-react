@@ -1,0 +1,369 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.section {
+  padding: $spacing-3xl $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.altBg {
+  background: rgba($bg-card, 0.4);
+  max-width: none;
+  width: calc(100% - ($spacing-lg * 2));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $spacing-2xl;
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $secondary;
+    background: rgba($secondary, 0.1);
+    border: 1px solid rgba($secondary, 0.15);
+    margin-bottom: $spacing-md;
+  }
+
+  .title {
+    font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-md;
+
+    em {
+      font-style: normal;
+      @include gradient-text($secondary, #00b894);
+    }
+  }
+
+  .desc {
+    color: $text-secondary;
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.7;
+
+    strong {
+      color: #fff;
+      background: rgba($secondary, 0.15);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+  }
+}
+
+// ===== Agent 循环图 =====
+.loopContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-3xl;
+}
+
+.loopRing {
+  position: relative;
+  width: 380px;
+  height: 380px;
+}
+
+.loopSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.loopCenter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+
+  &.pulsing {
+    animation: pulse-ring 3s ease-in-out infinite;
+  }
+}
+
+.loopStatus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+
+  .statusMain {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 800;
+    @include gradient-text;
+    letter-spacing: -0.03em;
+  }
+
+  .statusSub {
+    display: block;
+    font-size: 13px;
+    color: $text-muted;
+    margin-top: 2px;
+  }
+}
+
+// ===== 控制按钮 =====
+.loopControls {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: 10px 26px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.25s $ease-out-expo;
+  border: none;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, $primary, #5b21b6);
+  color: #fff;
+  box-shadow: 0 3px 15px rgba($primary, 0.25);
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 5px 22px rgba($primary, 0.4);
+    transform: translateY(-1px);
+  }
+}
+
+.btnGhost {
+  background: rgba(#fff, 0.05);
+  color: $text-secondary;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: rgba(#fff, 0.08);
+    color: #fff;
+    border-color: $border-light;
+  }
+}
+
+// ===== 详情卡片 =====
+.detailCard {
+  @include card-base($spacing-md $spacing-lg);
+  text-align: center;
+  min-width: 340px;
+  max-width: 520px;
+  animation: slideUp 0.3s ease both;
+
+  strong {
+    font-size: 0.95rem;
+    color: #fff;
+  }
+  p {
+    color: $text-secondary;
+    font-size: 0.88rem;
+    margin: 8px 0;
+  }
+  code {
+    display: block;
+    text-align: left;
+    background: rgba(0, 0, 0, 0.3);
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-sm;
+    font-size: 0.82rem;
+    overflow-x: auto;
+    white-space: normal;
+  }
+}
+
+// ===== 日志面板 =====
+.logPanel {
+  width: 100%;
+  max-width: 600px;
+  min-height: 160px;
+  max-height: 280px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-family: $font-mono;
+  font-size: 12.5px;
+  line-height: 1.85;
+}
+
+.logItem {
+  color: $text-secondary;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(#fff, 0.03);
+
+  &.newLog {
+    color: #fff;
+    animation: logFlash 0.5s ease;
+  }
+}
+
+// ===== 工具箱 =====
+.toolBox {
+  @include card-base($spacing-xl);
+  margin-bottom: $spacing-2xl;
+
+  h4 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+  }
+  > p {
+    color: $text-secondary;
+    font-size: 0.93rem;
+    margin-bottom: $spacing-md;
+  }
+}
+
+.toolGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: $spacing-md;
+}
+
+.toolItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: $radius-sm;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.35);
+    transform: translateY(-1px);
+  }
+
+  .toolIcon {
+    font-size: 1.5rem;
+  }
+  div {
+    strong {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    small {
+      display: block;
+      color: $text-muted;
+      font-size: 0.78rem;
+    }
+  }
+}
+
+// ===== 工作模式 =====
+.modes {
+  h4 {
+    text-align: center;
+    font-size: 1.15rem;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+.modesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: $spacing-lg;
+}
+
+.modeCard {
+  @include card-base($spacing-xl);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--mode-color, $primary);
+  }
+
+  .modeTag {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mode-color, $primary);
+    background: rgba(var(--mode-color, #{$primary}), 0.1);
+    border: 1px solid rgba(var(--mode-color, #{$primary}), 0.18);
+    margin-bottom: $spacing-sm;
+  }
+
+  h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  p {
+    color: $text-secondary;
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+}
+
+// ===== 动画 =====
+@keyframes pulse-ring {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.85;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logFlash {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

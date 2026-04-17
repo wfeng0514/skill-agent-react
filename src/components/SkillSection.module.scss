@@ -1,0 +1,386 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.section {
+  padding: $spacing-3xl $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $spacing-2xl;
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $primary-light;
+    background: rgba($primary, 0.1);
+    border: 1px solid rgba($primary, 0.15);
+    margin-bottom: $spacing-md;
+  }
+
+  .title {
+    font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-md;
+
+    em {
+      font-style: normal;
+      @include gradient-text;
+    }
+  }
+
+  .desc {
+    color: $text-secondary;
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.7;
+
+    strong {
+      color: #fff;
+      background: rgba($primary, 0.15);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+  }
+}
+
+// ===== 特征网格 =====
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: $spacing-lg;
+  margin-bottom: $spacing-3xl;
+}
+
+.featureCard {
+  @include card-base($spacing-lg);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent, $primary);
+    opacity: 0.8;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  .featureIcon {
+    font-size: 2rem;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(var(--accent, #{$primary}), 0.1);
+    margin-bottom: $spacing-md;
+  }
+
+  .featureTitle {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .featureDesc {
+    color: $text-secondary;
+    line-height: 1.65;
+    font-size: 0.94rem;
+  }
+}
+
+// ===== 文件树演示 =====
+.demo {
+  margin-bottom: $spacing-2xl;
+}
+
+.demoLabel {
+  text-align: center;
+  font-size: 13px;
+  color: $text-muted;
+  margin-bottom: $spacing-md;
+  letter-spacing: 0.02em;
+}
+
+.fileViewer {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 0;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  border: 1px solid $border-color;
+  background: $bg-card;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+.treePane {
+  background: rgba(#000, 0.2);
+  border-right: 1px solid $border-color;
+  max-height: 480px;
+  overflow-y: auto;
+
+  @include tablet {
+    max-height: 250px;
+  }
+}
+
+.treeHeader {
+  padding: $spacing-sm $spacing-md;
+  font-family: $font-mono;
+  font-size: 12px;
+  font-weight: 600;
+  color: $primary-light;
+  background: rgba($primary, 0.08);
+  border-bottom: 1px solid $border-color;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.treeFolder,
+.treeFile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 16px;
+  font-size: 13px;
+  text-align: left;
+  background: none;
+  color: $text-secondary;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  border: none;
+
+  &:hover {
+    background: rgba(#fff, 0.04);
+    color: #fff;
+  }
+}
+
+.treeFolder {
+  &.active {
+    color: #fff;
+  }
+  .folderArrow {
+    width: 14px;
+    font-size: 10px;
+    transition: transform 0.2s;
+  }
+  .folderIcon {
+    font-size: 14px;
+  }
+}
+
+.treeFile {
+  &.active {
+    background: rgba($primary, 0.12) !important;
+    color: #fff;
+    border-left: 3px solid $primary;
+  }
+  span:first-child {
+    font-size: 14px;
+    width: 20px;
+    text-align: center;
+  }
+}
+
+.previewPane {
+  min-height: 400px;
+  display: flex;
+  align-items: stretch;
+
+  @include tablet {
+    min-height: 300px;
+  }
+}
+
+.previewPanel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(#000, 0.25);
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  background: rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid $border-color;
+  font-size: 12px;
+}
+
+.previewDots {
+  display: flex;
+  gap: 6px;
+
+  span {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+}
+.dotRed {
+  background: #ff5f57;
+}
+.dotYellow {
+  background: #febc2e;
+}
+.dotGreen {
+  background: #28c840;
+}
+
+.previewName {
+  font-family: $font-mono;
+  color: $text-muted;
+  margin-left: auto;
+}
+
+.preContent {
+  flex: 1;
+  margin: 0;
+  padding: $spacing-lg;
+  overflow: auto;
+
+  code {
+    display: block;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: $text-secondary;
+    background: transparent;
+    padding: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}
+
+.emptyPreview {
+  @include flex-center;
+  flex: 1;
+  color: $text-muted;
+  font-size: 14px;
+}
+
+// ===== 存储位置 =====
+.storageInfo {
+  margin-bottom: $spacing-2xl;
+}
+
+.storageCard {
+  @include card-base($spacing-xl);
+  background: linear-gradient(135deg, $bg-card, rgba($primary, 0.06));
+
+  h4 {
+    font-size: 1.15rem;
+    margin-bottom: $spacing-md;
+  }
+
+  .pathCode {
+    display: block;
+    padding: $spacing-md;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: $radius-sm;
+    font-size: 13px;
+    margin-bottom: $spacing-md;
+    color: $secondary;
+    text-align: center;
+  }
+
+  ul {
+    list-style: none;
+    display: grid;
+    gap: $spacing-sm;
+
+    li {
+      padding: $spacing-sm $spacing-md;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: $radius-sm;
+      font-size: 0.93rem;
+      color: $text-secondary;
+
+      strong {
+        color: $text-primary;
+      }
+    }
+  }
+}
+
+// ===== 触发流程 =====
+.flowInfo {
+  h4 {
+    text-align: center;
+    font-size: 1.15rem;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+.flowSteps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  padding: $spacing-md 0;
+
+  @include mobile {
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+}
+
+.flowStep {
+  @include card-base($spacing-md $spacing-lg);
+  text-align: center;
+  font-size: 0.85rem;
+  color: $text-secondary;
+
+  .flowNum {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: $primary;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto $spacing-xs;
+  }
+}
+
+.flowArrow {
+  color: $primary-light;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0 2px;
+  flex-shrink: 0;
+
+  @include mobile {
+    transform: rotate(90deg);
+  }
+}

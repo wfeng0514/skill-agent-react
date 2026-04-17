@@ -1,0 +1,91 @@
+// ===== SCSS Mixins =====
+@use 'variables' as *;
+
+// 响应式断点
+@mixin mobile {
+  @media (max-width: $bp-mobile) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media (max-width: $bp-tablet) {
+    @content;
+  }
+}
+@mixin desktop-up {
+  @media (min-width: $bp-desktop) {
+    @content;
+  }
+}
+
+// Flex 居中
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// 卡片基础样式
+@mixin card-base($padding: $spacing-lg) {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: $padding;
+  transition: all 0.3s $ease-out-expo;
+
+  &:hover {
+    border-color: $border-light;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+}
+
+// 发光效果
+@mixin glow($color: $primary) {
+  box-shadow:
+    0 0 20px rgba($color, 0.15),
+    0 0 60px rgba($color, 0.05);
+}
+
+// 渐变文字
+@mixin gradient-text($from: $primary, $to: $secondary) {
+  background: linear-gradient(135deg, $from, $to);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// 玻璃态
+@mixin glass {
+  background: rgba($bg-card, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(#fff, 0.06);
+}
+
+// 动画关键帧
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 淡入动画
+@mixin animate-fadeInUp($delay: 0s) {
+  animation: fadeInUp 0.6s $ease-out-expo $delay both;
+}

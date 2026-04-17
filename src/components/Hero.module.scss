@@ -1,0 +1,196 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.hero {
+  position: relative;
+  padding: $spacing-3xl $spacing-lg;
+  text-align: center;
+  overflow: hidden;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  // 背景网格
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba($primary, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba($primary, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  }
+
+  // 装饰光晕
+  .glow {
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba($primary, 0.12) 0%,
+      rgba($secondary, 0.06) 40%,
+      transparent 70%
+    );
+    pointer-events: none;
+    animation: float-glow 8s ease-in-out infinite alternate;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-md;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: $primary-light;
+    background: rgba($primary, 0.1);
+    border: 1px solid rgba($primary, 0.2);
+    margin-bottom: $spacing-lg;
+    animation: fadeInUp 0.6s $ease-out-expo both;
+    z-index: 1;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $secondary;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  .title {
+    @include gradient-text;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: $spacing-lg;
+    letter-spacing: -0.02em;
+    animation: fadeInUp 0.6s $ease-out-expo 0.1s both;
+    z-index: 1;
+
+    .highlight {
+      position: relative;
+      @include gradient-text($secondary, #00b894);
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: -2px;
+        right: -2px;
+        height: 10px;
+        background: rgba($secondary, 0.2);
+        border-radius: 5px;
+        z-index: -1;
+      }
+    }
+  }
+
+  .subtitle {
+    color: $text-secondary;
+    font-size: clamp(0.95rem, 2vw, 1.12rem);
+    max-width: 650px;
+    margin: 0 auto $spacing-xl;
+    line-height: 1.7;
+    animation: fadeInUp 0.6s $ease-out-expo 0.2s both;
+    z-index: 1;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-md;
+    animation: fadeInUp 0.6s $ease-out-expo 0.3s both;
+    z-index: 1;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: 13px 32px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    transition: all 0.3s $ease-out-expo;
+    text-decoration: none;
+  }
+
+  .btnPrimary {
+    background: linear-gradient(135deg, $primary, #5b21b6);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba($primary, 0.25);
+
+    &:hover {
+      box-shadow:
+        0 6px 28px rgba($primary, 0.45),
+        0 0 48px rgba($primary, 0.15);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+  }
+
+  .btnOutline {
+    background: transparent;
+    color: $text-primary;
+    border: 1px solid $border-light;
+
+    &:hover {
+      border-color: $primary;
+      background: rgba($primary, 0.08);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+  }
+
+  .scrollHint {
+    position: absolute;
+    bottom: $spacing-xl;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xs;
+    color: $text-muted;
+    font-size: 12px;
+    opacity: 0;
+    animation: fadeInUp 0.6s $ease-out-expo 0.5s both;
+
+    .arrow {
+      width: 18px;
+      height: 18px;
+      border-right: 2px solid $text-muted;
+      border-bottom: 2px solid $text-muted;
+      transform: rotate(45deg);
+      animation: bounce-down 1.5s ease-in-out infinite;
+    }
+  }
+}
+
+// ===== 动画（组件专属） =====
+
+@keyframes float-glow {
+  from {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  to {
+    transform: translateX(-50%) translateY(-30px) scale(1.08);
+  }
+}

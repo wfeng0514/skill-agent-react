@@ -1,0 +1,257 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.section {
+  padding: $spacing-3xl $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $spacing-2xl;
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #fd79a8;
+    background: rgba($accent, 0.1);
+    border: 1px solid rgba($accent, 0.15);
+    margin-bottom: $spacing-md;
+  }
+
+  .title {
+    font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-md;
+
+    em {
+      font-style: normal;
+      @include gradient-text($accent, $primary);
+    }
+  }
+
+  .desc {
+    color: $text-secondary;
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.7;
+
+    strong {
+      color: #fff;
+      background: rgba($accent, 0.15);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+  }
+}
+
+// ===== 类比理解 =====
+.analogies {
+  margin-bottom: $spacing-3xl;
+}
+
+.analogies h4,
+.workflow h4,
+.compareTable h4 {
+  text-align: center;
+  font-size: 1.15rem;
+  margin-bottom: $spacing-lg;
+}
+
+.analogyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: $spacing-lg;
+}
+
+.analogyCard {
+  @include card-base($spacing-lg);
+  text-align: center;
+
+  .analogyIcon {
+    font-size: 2rem;
+    margin-bottom: $spacing-sm;
+  }
+  h4 {
+    font-size: 1rem;
+    margin-bottom: $spacing-sm;
+    color: #fff;
+  }
+}
+
+.analogyRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  font-size: 0.88rem;
+}
+
+.analogySide {
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(0, 0, 0, 0.25);
+
+  &.right {
+    background: rgba($primary, 0.12);
+    color: $primary-light;
+  }
+}
+
+.analogyArrow {
+  font-weight: bold;
+  color: $text-muted;
+  font-size: 1.2rem;
+}
+
+// ===== 完整工作流 =====
+.workflow {
+  margin-bottom: $spacing-3xl;
+}
+
+.flowContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.flowStep {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  position: relative;
+  padding-left: $spacing-xl;
+
+  // 根据类型设置颜色
+  &[data-type='user'] .flowNum {
+    background: #f39c12 !important;
+  }
+  &[data-type='agent'] .flowNum {
+    background: $primary !important;
+  }
+  &[data-type='skill'] .flowNum {
+    background: $secondary !important;
+  }
+  &[data-type='tool'] .flowNum {
+    background: $accent !important;
+  }
+  &[data-type='result'] .flowNum {
+    background: #27ae60 !important;
+  }
+
+  .flowNum {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    @include flex-center;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+    box-shadow: 0 3px 12px rgba(#000, 0.2);
+  }
+
+  .flowContent {
+    @include card-base($spacing-md $spacing-lg);
+    flex: 1;
+    transform: none !important;
+
+    &:hover {
+      transform: translateY(-2px) !important;
+    }
+
+    strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    p {
+      color: $text-secondary;
+      font-size: 0.87rem;
+      line-height: 1.55;
+      margin: 0;
+    }
+  }
+
+  .flowConnectorV {
+    position: absolute;
+    left: 22px;
+    top: 42px;
+    width: 2px;
+    height: calc(100% + 16px);
+    background: linear-gradient(to bottom, $border-light, transparent);
+  }
+
+  .flowConnectorH {
+    position: absolute;
+    left: 28px;
+    top: 44px;
+    width: 20px;
+    height: 2px;
+    background: $border-light;
+  }
+}
+
+// ===== 对比表 =====
+.compareTable {
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: $bg-card;
+    border-radius: $radius-md;
+    overflow: hidden;
+    border: 1px solid $border-color;
+  }
+
+  thead th {
+    padding: $spacing-md $spacing-lg;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.9rem;
+    background: rgba($primary, 0.08);
+    border-bottom: 2px solid $border-color;
+    color: $text-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+
+    &:first-child {
+      width: 140px;
+    }
+  }
+
+  tbody td {
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid rgba(#fff, 0.04);
+    font-size: 0.92rem;
+    color: $text-secondary;
+    transition: all 0.18s ease;
+
+    &:first-child strong {
+      color: #fff;
+    }
+  }
+
+  tbody tr:hover td {
+    background: rgba(#fff, 0.02);
+  }
+
+  tbody tr:last-child td {
+    background: rgba($primary, 0.06);
+    text-align: center;
+    font-weight: 600;
+    color: #fff;
+    border-bottom: none;
+  }
+}

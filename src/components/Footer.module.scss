@@ -1,0 +1,54 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.footer {
+  padding: $spacing-2xl $spacing-lg;
+  border-top: 1px solid $border-color;
+  text-align: center;
+}
+
+.inner {
+  max-width: 600px;
+  margin: 0 auto;
+
+  p {
+    color: $text-secondary;
+    font-size: 0.92rem;
+
+    strong {
+      color: #fff;
+    }
+  }
+}
+
+.highlight {
+  @include gradient-text;
+  font-weight: 600;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-md;
+  margin: $spacing-md 0;
+
+  a {
+    font-size: 13px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.04);
+    transition: all 0.22s ease;
+    color: $text-muted;
+
+    &:hover {
+      background: rgba($primary, 0.1);
+      color: #fff;
+    }
+  }
+}
+
+.copyright {
+  margin-top: $spacing-md !important;
+  font-size: 12px !important;
+  opacity: 0.5;
+}

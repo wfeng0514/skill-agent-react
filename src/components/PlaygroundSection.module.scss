@@ -1,0 +1,333 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.section {
+  padding: $spacing-3xl $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.altBg {
+  background: rgba($bg-card, 0.4);
+  max-width: none;
+  width: calc(100% - ($spacing-lg * 2));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $spacing-2xl;
+
+  .tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #f39c12;
+    background: rgba(#f39c12, 0.1);
+    border: 1px solid rgba(#f39c12, 0.15);
+    margin-bottom: $spacing-md;
+  }
+
+  .title {
+    font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: $spacing-md;
+  }
+
+  .desc {
+    color: $text-secondary;
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+}
+
+// ===== 实验场主体 =====
+.playground {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: $spacing-xl;
+  align-items: start;
+
+  @include tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ===== 输入区 =====
+.inputArea {
+  @include card-base($spacing-xl);
+
+  .label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: $text-secondary;
+    margin-bottom: $spacing-sm;
+    letter-spacing: 0.02em;
+  }
+
+  .presetBtns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+  }
+}
+
+.presetBtn {
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.25);
+  color: $text-secondary;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.22s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    border-color: $border-light;
+  }
+
+  &.active {
+    background: rgba($primary, 0.15);
+    color: #fff;
+    border-color: $primary;
+    box-shadow: 0 2px 10px rgba($primary, 0.15);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.textarea {
+  width: 100%;
+  padding: $spacing-md;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  color: #fff;
+  font-family: $font-mono;
+  font-size: 13px;
+  line-height: 1.65;
+  resize: vertical;
+  transition: all 0.22s ease;
+  outline: none;
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+  }
+
+  &::placeholder {
+    color: $text-muted;
+  }
+}
+
+.runBtn {
+  width: 100%;
+  margin-top: $spacing-lg;
+  padding: 14px;
+  border-radius: $radius-md;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, $secondary, #0d7377);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  transition: all 0.3s ease;
+  border: none;
+
+  &:hover:not(:disabled) {
+    box-shadow:
+      0 4px 20px rgba($secondary, 0.35),
+      0 0 40px rgba($secondary, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.running {
+    animation: btn-pulse 1.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  // 加载动画
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+}
+
+// ===== 输出区 =====
+.outputArea {
+  @include card-base(0);
+  overflow: hidden;
+  animation: slideUpFade 0.35s ease both;
+}
+
+.outputHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md $spacing-lg;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid $border-color;
+}
+
+.outputTitle {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.statusBadge {
+  padding: 4px 14px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.active {
+    background: rgba($secondary, 0.15);
+    color: $secondary;
+    animation: badge-blink 1s ease-in-out infinite;
+  }
+
+  &.done {
+    background: rgba(#27ae60, 0.15);
+    color: #27ae60;
+  }
+}
+
+.outputStream {
+  min-height: 300px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding: $spacing-md $spacing-lg;
+  font-family: $font-mono;
+  font-size: 12.5px;
+  line-height: 1.9;
+}
+
+.outputLine {
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(#fff, 0.02);
+  animation: logAppear 0.25s ease both;
+  white-space: pre-wrap;
+  word-break: break-all;
+
+  &.step {
+    color: $text-secondary;
+  }
+  &.skill {
+    color: $secondary;
+    font-weight: 600;
+  }
+  &.tool {
+    color: $accent;
+  }
+  &.result {
+    color: #27ae60;
+    font-weight: 700;
+    padding-top: $spacing-md;
+    font-size: 14px;
+  }
+  &.empty {
+    color: $text-muted;
+    font-style: italic;
+  }
+}
+
+// ===== 底部提示 =====
+.footerNote {
+  text-align: center;
+  margin-top: $spacing-2xl;
+  padding: $spacing-xl;
+  border-radius: $radius-lg;
+  background: rgba(0, 0, 0, 0.2);
+
+  p {
+    color: $text-muted;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    strong {
+      color: $text-primary;
+    }
+  }
+}
+
+// ===== 动画 =====
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes btn-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes badge-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
