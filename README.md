@@ -7,14 +7,14 @@
 
 ## 📖 内容概览
 
-| 章节 | 核心内容 | 交互 |
-|------|----------|------|
-| **Hero** | 项目介绍、视觉入口 | 渐变动画背景 |
-| **Section 01 — Skill** | Skill 的 4 大特征、标准文件结构（SKILL.md）、触发流程、存储位置 | 文件树点击切换预览内容 |
-| **Section 02 — Agent** | Agent 的 6 步工作循环（含动画演示）、工具箱、3 种工作模式 | 点击「演示循环」逐步高亮 + 实时日志输出 |
-| **Section 03 — 关系** | 类比理解、Agent-Skill-Tool 完整工作流图、对比表格 | 静态展示 |
-| **Section 04 — 实验场** | 模拟器：选择任务 → 观看 Agent 执行全过程 | 5 种预设任务 + 自定义输入，逐行流式输出 |
-| **Mastra UI** | 真实天气 Agent 对话界面（接入 Mastra 后端） | 流式聊天 + 工具调用展示 |
+| 章节                    | 核心内容                                                        | 交互                                    |
+| ----------------------- | --------------------------------------------------------------- | --------------------------------------- |
+| **Hero**                | 项目介绍、视觉入口                                              | 渐变动画背景                            |
+| **Section 01 — Skill**  | Skill 的 4 大特征、标准文件结构（SKILL.md）、触发流程、存储位置 | 文件树点击切换预览内容                  |
+| **Section 02 — Agent**  | Agent 的 6 步工作循环（含动画演示）、工具箱、3 种工作模式       | 点击「演示循环」逐步高亮 + 实时日志输出 |
+| **Section 03 — 关系**   | 类比理解、Agent-Skill-Tool 完整工作流图、对比表格               | 静态展示                                |
+| **Section 04 — 实验场** | 模拟器：选择任务 → 观看 Agent 执行全过程                        | 5 种预设任务 + 自定义输入，逐行流式输出 |
+| **Mastra UI**           | 真实天气 Agent 对话界面（接入 Mastra 后端）                     | 流式聊天 + 工具调用展示                 |
 
 ---
 
@@ -53,13 +53,13 @@ src/mastra/
 
 #### `src/mastra/agents/weather-agent.ts` — 天气 Agent
 
-| 属性 | 值 |
-|------|----|
-| `id` | `weather-agent` |
-| `name` | Weather Agent |
-| `model` | `zhipuai/glm-4.5-flash`（也可切换为 `google/gemini-2.5-pro`） |
-| `tools` | `weatherTool` |
-| `memory` | `new Memory()`（开启对话历史记忆） |
+| 属性     | 值                                                            |
+| -------- | ------------------------------------------------------------- |
+| `id`     | `weather-agent`                                               |
+| `name`   | Weather Agent                                                 |
+| `model`  | `zhipuai/glm-4.5-flash`（也可切换为 `google/gemini-2.5-pro`） |
+| `tools`  | `weatherTool`                                                 |
+| `memory` | `new Memory()`（开启对话历史记忆）                            |
 
 Agent 的 System Prompt 指导其：询问地点、翻译非英文地名、在回复中提供温度/湿度/风速/降水等详情，以及根据天气推荐活动。
 
@@ -112,30 +112,38 @@ npm run dev
 ```
 
 启动后可访问：
+
 - **Mastra Studio**：`http://localhost:4111` — 可视化调试 Agent / Workflow / Trace
 - **Chat API**：`http://localhost:4111/chat/weather-agent` — 供前端 UI 调用
 
 > ⚠️ 需要在 `.env` 中配置模型 API Key（参考 `.env.example`），例如：
+>
 > ```
 > ZHIPUAI_API_KEY=your_key_here
 > # 或
 > GOOGLE_GENERATIVE_AI_API_KEY=your_key_here
 > ```
 
+### 学习参考
+
+本项目的 Mastra 天气 Agent 示例参考自官方入门教程：
+
+- **[Mastra Vite + React 快速入门](https://mastra.org.cn/guides/getting-started/vite-react)** — 手把手教你将 Mastra 集成到 React + Vite 项目，构建工具调用型 Agent 并对接聊天 UI
+
 ---
 
 ## 🛠️ 技术栈
 
-| 技术 | 版本 | 说明 |
-|------|------|------|
-| [React](https://react.dev) | 19.x | UI 组件化开发 |
-| [TypeScript](https://www.typescriptlang.org) | ~6.0.x | 类型安全 |
-| [Vite](https://vitejs.dev) | 8.x | 开发构建工具（HMR） |
-| [SCSS Module](https://sass-lang.com) | 1.99+ | 样式隔离 + 变量/Mixin 设计体系 |
-| [Tailwind CSS](https://tailwindcss.com) | 4.x | Mastra UI 使用的原子化样式 |
-| [Mastra](https://mastra.ai) | 1.x | AI Agent / Workflow 框架 |
-| [AI SDK](https://sdk.vercel.ai) | 6.x | 前端 `useChat` Hook + 流式通信 |
-| [Zod](https://zod.dev) | 4.x | 工具输入/输出 Schema 校验 |
+| 技术                                         | 版本   | 说明                           |
+| -------------------------------------------- | ------ | ------------------------------ |
+| [React](https://react.dev)                   | 19.x   | UI 组件化开发                  |
+| [TypeScript](https://www.typescriptlang.org) | ~6.0.x | 类型安全                       |
+| [Vite](https://vitejs.dev)                   | 8.x    | 开发构建工具（HMR）            |
+| [SCSS Module](https://sass-lang.com)         | 1.99+  | 样式隔离 + 变量/Mixin 设计体系 |
+| [Tailwind CSS](https://tailwindcss.com)      | 4.x    | Mastra UI 使用的原子化样式     |
+| [Mastra](https://mastra.ai)                  | 1.x    | AI Agent / Workflow 框架       |
+| [AI SDK](https://sdk.vercel.ai)              | 6.x    | 前端 `useChat` Hook + 流式通信 |
+| [Zod](https://zod.dev)                       | 4.x    | 工具输入/输出 Schema 校验      |
 
 ### 主要依赖
 
@@ -234,7 +242,7 @@ npm run lint
 npx prettier --write "src/**/*.{ts,tsx,scss}"
 ```
 
-> 如需使用 Mastra 天气 Agent 功能，请先配置 `.env` 中的模型 API Key，Mastra 开发服务器默认也通过 `npm run dev` 启动，监听 `http://localhost:4111`。
+> 如需使用 Mastra 天气 Agent 功能，请先配置 `.env` 中的模型 API Key，Mastra 开发服务器通过 `npx mastra dev` 启动，监听 `http://localhost:4111`。
 
 ---
 
@@ -250,6 +258,7 @@ npx prettier --write "src/**/*.{ts,tsx,scss}"
 ### 组件样式隔离
 
 每个组件使用 `.module.scss` (CSS Module)，避免全局污染：
+
 ```tsx
 import styles from './MyComponent.module.css';
 <div className={styles.container}>
@@ -257,13 +266,13 @@ import styles from './MyComponent.module.css';
 
 ### Mixin 复用 (`_mixins.scss`)
 
-| Mixin | 用途 | 使用场景 |
-|-------|------|----------|
-| `mobile()` / `tablet()` / `desktop-up()` | 响应式断点 | 所有组件 |
-| `card-base($padding)` | 卡片基础样式 | 特征卡、对比卡等 |
-| `glow($color)` | 发光效果 | 活跃节点、按钮 hover |
-| `gradient-text($from, $to)` | 渐变文字 | 标题、强调文字 |
-| `glass()` | 玻璃态效果 | 导航栏 |
+| Mixin                                    | 用途         | 使用场景             |
+| ---------------------------------------- | ------------ | -------------------- |
+| `mobile()` / `tablet()` / `desktop-up()` | 响应式断点   | 所有组件             |
+| `card-base($padding)`                    | 卡片基础样式 | 特征卡、对比卡等     |
+| `glow($color)`                           | 发光效果     | 活跃节点、按钮 hover |
+| `gradient-text($from, $to)`              | 渐变文字     | 标题、强调文字       |
+| `glass()`                                | 玻璃态效果   | 导航栏               |
 
 ---
 
@@ -299,14 +308,14 @@ import styles from './MyComponent.module.css';
 
 项目使用 [Prettier](https://prettier.io) 统一代码格式，规则见 [`.prettierrc`](./.prettierrc)：
 
-| 规则 | 值 |
-|------|-----|
-| 单引号 | ✅ |
-| 分号 | ✅ |
-| 尾逗号 | all |
-| 行宽 | 90 字符 |
-| 缩进 | 2 空格 |
-| 行尾符 | LF |
+| 规则   | 值      |
+| ------ | ------- |
+| 单引号 | ✅      |
+| 分号   | ✅      |
+| 尾逗号 | all     |
+| 行宽   | 90 字符 |
+| 缩进   | 2 空格  |
+| 行尾符 | LF      |
 
 ---
 

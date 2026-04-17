@@ -83,6 +83,13 @@ code {
   background: rgba($primary, 0.15);
   border-radius: $radius-sm;
   color: $primary-light;
+
+  // 不覆盖 Tailwind/shadcn 组件内的 code 样式
+  :where(.dark) & {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
 }
 
 pre code {
@@ -94,14 +101,16 @@ pre code {
 }
 
 button,
-input {
+input,
+textarea {
   font-family: inherit;
   font-size: inherit;
-  outline: none;
 }
 
-button {
+// 只对非 Tailwind/shadcn 组件的按钮重置样式
+button:not([data-slot]) {
   cursor: pointer;
   border: none;
+  outline: none;
   transition: all 0.25s $ease-out-expo;
 }

@@ -1,0 +1,140 @@
+@use '../styles/variables' as *;
+
+.agentPage {
+  height: calc(100vh - 52px);
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-dark;
+  overflow: hidden;
+}
+
+.header {
+  text-align: center;
+  padding: 16px 24px 8px;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 2px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: $text-muted;
+}
+
+.chatContainer {
+  flex: 1;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0 16px 16px;
+}
+
+.conversation {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+// ── 用户消息样式（靠右，紫色气泡） ──
+// Message 组件用 Tailwind class: is-user / is-assistant 控制对齐
+// MessageContent 用 group-[.is-user] / group-[.is-assistant] 控制气泡
+
+:global(.is-user) {
+  :global(.flex.w-fit) {
+    // MessageContent — 用户气泡
+    background: #6c5ce7 !important;
+    color: #fff !important;
+    border-radius: 16px 16px 4px 16px !important;
+    padding: 10px 16px !important;
+    max-width: 75%;
+  }
+
+  // MessageResponse 内的文字
+  :global(.size-full) {
+    color: #fff !important;
+
+    :global(p), :global(span), :global(div) {
+      color: #fff !important;
+    }
+  }
+}
+
+// ── 助手消息样式（靠左，半透明气泡） ──
+
+:global(.is-assistant) {
+  :global(.flex.w-fit) {
+    // MessageContent — 助手气泡
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #e6edf3 !important;
+    border-radius: 16px 16px 16px 4px !important;
+    padding: 10px 16px !important;
+    max-width: 85%;
+  }
+
+  :global(.size-full) {
+    color: #e6edf3 !important;
+  }
+}
+
+// ── 输入框 ──
+
+.promptInput {
+  flex-shrink: 0;
+  margin-top: 12px;
+  border-radius: 12px;
+
+  :global([data-slot="input-group"]) {
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus-within {
+      border-color: rgba(108, 92, 231, 0.5);
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+    }
+  }
+
+  :global(textarea) {
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #e6edf3;
+    background: transparent;
+    min-height: 48px;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+  }
+
+  :global(button[type="submit"]) {
+    background: #6c5ce7;
+    color: #fff;
+    border-radius: 8px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    transition: background 0.2s, transform 0.1s;
+
+    &:hover {
+      background: #5a4bd1;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
