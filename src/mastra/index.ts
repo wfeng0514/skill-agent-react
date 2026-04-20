@@ -15,6 +15,7 @@ import { Workspace, LocalFilesystem } from '@mastra/core/workspace';
 const workspace = new Workspace({
   filesystem: new LocalFilesystem({ basePath: './wokerkspace' }),
   skills: ['./**/skills'],
+  bm25: true,
 });
 
 export const mastra = new Mastra({
