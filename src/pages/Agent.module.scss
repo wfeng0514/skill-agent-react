@@ -28,13 +28,13 @@
 
 .chatContainer {
   flex: 1;
-  max-width: 860px;
-  width: 100%;
+  width: 80%;
+  max-width: 960px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  padding: 0 16px 16px;
+  padding: 0 0 16px;
 }
 
 .conversation {
@@ -44,12 +44,9 @@
 }
 
 // ── 用户消息样式（靠右，紫色气泡） ──
-// Message 组件用 Tailwind class: is-user / is-assistant 控制对齐
-// MessageContent 用 group-[.is-user] / group-[.is-assistant] 控制气泡
 
 :global(.is-user) {
-  :global(.flex.w-fit) {
-    // MessageContent — 用户气泡
+  > :global(.flex.w-fit) {
     background: #6c5ce7 !important;
     color: #fff !important;
     border-radius: 16px 16px 4px 16px !important;
@@ -57,8 +54,7 @@
     max-width: 75%;
   }
 
-  // MessageResponse 内的文字
-  :global(.size-full) {
+  > :global(.flex.w-fit) > :global(.size-full) {
     color: #fff !important;
 
     :global(p), :global(span), :global(div) {
@@ -70,8 +66,7 @@
 // ── 助手消息样式（靠左，半透明气泡） ──
 
 :global(.is-assistant) {
-  :global(.flex.w-fit) {
-    // MessageContent — 助手气泡
+  > :global(.flex.w-fit) {
     background: rgba(255, 255, 255, 0.08) !important;
     color: #e6edf3 !important;
     border-radius: 16px 16px 16px 4px !important;
@@ -79,8 +74,76 @@
     max-width: 85%;
   }
 
-  :global(.size-full) {
+  > :global(.flex.w-fit) > :global(.size-full) {
     color: #e6edf3 !important;
+  }
+}
+
+// ── Tool 组件内边距修复 ──
+
+:global(.not-prose.group) {
+  padding: 12px 16px !important;
+}
+
+:global([data-slot="tool-content"]) {
+  padding-top: 4px;
+}
+
+// ── 思考指示器 ──
+
+.thinkingIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+}
+
+.thinkingDots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6c5ce7;
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.dot2 {
+  animation-delay: 0.2s;
+}
+
+.dot3 {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+  0%, 80%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.thinkingText {
+  font-size: 14px;
+  color: $text-muted;
+  font-style: italic;
+  animation: textFade 2s ease-in-out infinite;
+}
+
+@keyframes textFade {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
   }
 }
 

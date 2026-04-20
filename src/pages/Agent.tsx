@@ -9,15 +9,24 @@ import {
   PromptInputFooter,
   PromptInputSubmit,
 } from '@/components/ai-elements/prompt-input';
-import {
-  Conversation,
-  ConversationContent,
-  ConversationScrollButton,
-} from '@/components/ai-elements/conversation';
+import { Conversation, ConversationContent, ConversationScrollButton } from '@/components/ai-elements/conversation';
 import { Message, MessageContent, MessageResponse } from '@/components/ai-elements/message';
 import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from '@/components/ai-elements/tool';
 
 import styles from './Agent.module.scss';
+
+// ── 自定义思考指示器 ──
+
+const ThinkingIndicator: React.FC = () => (
+  <div className={styles.thinkingIndicator}>
+    <div className={styles.thinkingDots}>
+      <span className={styles.dot} />
+      <span className={`${styles.dot} ${styles.dot2}`} />
+      <span className={`${styles.dot} ${styles.dot3}`} />
+    </div>
+    <span className={styles.thinkingText}>正在思考中...</span>
+  </div>
+);
 
 const Agent: React.FC = () => {
   const { messages, sendMessage, status } = useChat({
@@ -25,6 +34,8 @@ const Agent: React.FC = () => {
       api: 'http://localhost:4111/chat/weather-agent',
     }),
   });
+
+  const isLoading = status === 'submitted' || status === 'streaming';
 
   const handleSubmit = async ({ text }: { text: string }) => {
     if (!text.trim()) return;
@@ -44,10 +55,13 @@ const Agent: React.FC = () => {
               <React.Fragment key={message.id}>
                 {message.parts?.map((part, i) => {
                   if (part.type === 'text') {
+                    const text = (part as { type: 'text'; text: string }).text;
+                    // 跳过空文字 part，避免空气泡
+                    if (!text.trim()) return null;
                     return (
                       <Message key={`${message.id}-${i}`} from={message.role}>
                         <MessageContent>
-                          <MessageResponse>{part.text}</MessageResponse>
+                          <MessageResponse>{text}</MessageResponse>
                         </MessageContent>
                       </Message>
                     );
@@ -73,6 +87,14 @@ const Agent: React.FC = () => {
                 })}
               </React.Fragment>
             ))}
+
+            {/* 只在 submitted 状态（助手还没响应）显示思考指示器 */}
+            {isLoading && (
+              <Message from="assistant">
+                <ThinkingIndicator />
+              </Message>
+            )}
+
             <ConversationScrollButton />
           </ConversationContent>
         </Conversation>

@@ -10,22 +10,11 @@ const Layout: React.FC = () => {
             🐾 SkillAgent
           </NavLink>
           <nav className={styles.nav}>
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) =>
-                `${styles.link} ${isActive ? styles.active : ''}`
-              }
-            >
+            <NavLink to="/" end className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}>
               <span className={styles.icon}>📖</span>
               <span>学习指南</span>
             </NavLink>
-            <NavLink
-              to="/agent"
-              className={({ isActive }) =>
-                `${styles.link} ${isActive ? styles.active : ''}`
-              }
-            >
+            <NavLink to="/agent" className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}>
               <span className={styles.icon}>🤖</span>
               <span>Agent 实战</span>
             </NavLink>
