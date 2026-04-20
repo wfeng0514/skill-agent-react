@@ -8,11 +8,12 @@
 }
 
 .altBg {
-  background: rgba($bg-card, 0.4);
+  background: $bg-card;
   max-width: none;
   width: calc(100% - ($spacing-lg * 2));
   margin-left: auto;
   margin-right: auto;
+  border-radius: $radius-lg;
 }
 
 .header {
@@ -28,8 +29,8 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: $secondary;
-    background: rgba($secondary, 0.1);
-    border: 1px solid rgba($secondary, 0.15);
+    background: rgba($secondary, 0.06);
+    border: 1px solid rgba($secondary, 0.1);
     margin-bottom: $spacing-md;
   }
 
@@ -38,6 +39,7 @@
     font-weight: 800;
     letter-spacing: -0.02em;
     margin-bottom: $spacing-md;
+    color: $text-primary;
 
     em {
       font-style: normal;
@@ -53,8 +55,8 @@
     line-height: 1.7;
 
     strong {
-      color: #fff;
-      background: rgba($secondary, 0.15);
+      color: $secondary;
+      background: rgba($secondary, 0.08);
       padding: 1px 6px;
       border-radius: 4px;
       font-weight: 600;
@@ -148,22 +150,22 @@
 .btnPrimary {
   background: linear-gradient(135deg, $primary, #5b21b6);
   color: #fff;
-  box-shadow: 0 3px 15px rgba($primary, 0.25);
+  box-shadow: 0 3px 15px rgba($primary, 0.2);
 
   &:hover:not(:disabled) {
-    box-shadow: 0 5px 22px rgba($primary, 0.4);
+    box-shadow: 0 5px 22px rgba($primary, 0.3);
     transform: translateY(-1px);
   }
 }
 
 .btnGhost {
-  background: rgba(#fff, 0.05);
+  background: $bg-card;
   color: $text-secondary;
-  border: 1px solid transparent;
+  border: 1px solid $border-color;
 
   &:hover {
-    background: rgba(#fff, 0.08);
-    color: #fff;
+    background: $bg-hover;
+    color: $text-primary;
     border-color: $border-light;
   }
 }
@@ -178,7 +180,7 @@
 
   strong {
     font-size: 0.95rem;
-    color: #fff;
+    color: $text-primary;
   }
   p {
     color: $text-secondary;
@@ -188,7 +190,7 @@
   code {
     display: block;
     text-align: left;
-    background: rgba(0, 0, 0, 0.3);
+    background: $bg-elevated;
     padding: $spacing-sm $spacing-md;
     border-radius: $radius-sm;
     font-size: 0.82rem;
@@ -204,7 +206,7 @@
   min-height: 160px;
   max-height: 280px;
   overflow-y: auto;
-  background: rgba(0, 0, 0, 0.3);
+  background: $bg-card;
   border: 1px solid $border-color;
   border-radius: $radius-md;
   padding: $spacing-md;
@@ -216,10 +218,10 @@
 .logItem {
   color: $text-secondary;
   padding: 3px 0;
-  border-bottom: 1px solid rgba(#fff, 0.03);
+  border-bottom: 1px solid $border-color;
 
   &.newLog {
-    color: #fff;
+    color: $text-primary;
     animation: logFlash 0.5s ease;
   }
 }
@@ -232,6 +234,7 @@
   h4 {
     font-size: 1.15rem;
     margin-bottom: 8px;
+    color: $text-primary;
   }
   > p {
     color: $text-secondary;
@@ -251,12 +254,12 @@
   align-items: center;
   gap: $spacing-sm;
   padding: $spacing-md;
-  background: rgba(0, 0, 0, 0.2);
+  background: $bg-elevated;
   border-radius: $radius-sm;
   transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.35);
+    background: $bg-hover;
     transform: translateY(-1px);
   }
 
@@ -268,6 +271,7 @@
       display: block;
       font-size: 0.9rem;
       font-weight: 600;
+      color: $text-primary;
     }
     small {
       display: block;
@@ -283,6 +287,7 @@
     text-align: center;
     font-size: 1.15rem;
     margin-bottom: $spacing-lg;
+    color: $text-primary;
   }
 }
 
@@ -316,8 +321,8 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--mode-color, $primary);
-    background: rgba(var(--mode-color, #{$primary}), 0.1);
-    border: 1px solid rgba(var(--mode-color, #{$primary}), 0.18);
+    background: rgba(var(--mode-color, #{$primary}), 0.06);
+    border: 1px solid rgba(var(--mode-color, #{$primary}), 0.12);
     margin-bottom: $spacing-sm;
   }
 
@@ -325,6 +330,7 @@
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 8px;
+    color: $text-primary;
   }
   p {
     color: $text-secondary;

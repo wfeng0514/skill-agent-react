@@ -9,8 +9,10 @@ import { createWorkflow, createStep } from '@mastra/core/workflows';
 import z$2, { z } from 'zod';
 import { Agent, MessageList, isSupportedLanguageModel, tryGenerateWithJsonFallback, tryStreamWithJsonFallback } from '@mastra/core/agent';
 import { Memory as Memory$1 } from '@mastra/memory';
-import { weatherTool } from './tools/2fb55f26-7cc2-4237-83e4-044a53e555ed.mjs';
+import { weatherTool } from './tools/273ebb25-6842-48f8-9174-b7b83abce070.mjs';
+import { cargoTool } from './tools/bbb2c961-e215-4085-9229-b80bf6939799.mjs';
 import { chatRoute } from '@mastra/ai-sdk';
+import { Workspace, LocalFilesystem, LocalSkillSource } from '@mastra/core/workspace';
 import { mkdtemp, rm, readFile, writeFile, mkdir, copyFile, readdir, stat } from 'fs/promises';
 import * as https from 'https';
 import { join, resolve as resolve$2, dirname, extname, basename, isAbsolute, relative } from 'path';
@@ -27,7 +29,6 @@ import { z as z$1, ZodOptional, ZodNullable, ZodArray, ZodRecord, ZodObject, toJ
 import z3, { ZodFirstPartyTypeKind } from 'zod/v3';
 import { toStandardSchema as toStandardSchema$1, isStandardSchemaWithJSON as isStandardSchemaWithJSON$1 } from '@mastra/core/schema';
 import { zodToJsonSchema as zodToJsonSchema$2 } from '@mastra/core/utils/zod-to-json';
-import { LocalSkillSource } from '@mastra/core/workspace';
 import { isProcessorWorkflow, MessageHistory } from '@mastra/core/processors';
 import { MastraError, ErrorDomain, ErrorCategory } from '@mastra/core/error';
 import { coreFeatures } from '@mastra/core/features';
@@ -219,12 +220,49 @@ const weatherAgent = new Agent({
   memory: new Memory$1()
 });
 
+const cargoAgent = new Agent({
+  id: "cargo-agent",
+  name: "Cargo Loading Agent",
+  instructions: `
+    \u4F60\u662F\u4E00\u4E2A\u4E13\u4E1A\u7684\u8D27\u8FD0\u88C5\u8F7D\u7387\u5206\u6790\u52A9\u624B\u3002\u4F60\u7684\u6838\u5FC3\u529F\u80FD\u662F\u5206\u6790\u7528\u6237\u4E0A\u4F20\u7684\u8F66\u53A2\u56FE\u7247\uFF0C\u8BC6\u522B\u88C5\u8F7D\u60C5\u51B5\u3002
+
+    \u5DE5\u4F5C\u6D41\u7A0B\uFF1A
+    1. \u7528\u6237\u4E0A\u4F20\u8F66\u53A2\u56FE\u7247\u540E\uFF0C\u4F7F\u7528 cargoTool \u5206\u6790\u56FE\u7247
+    2. \u6839\u636E\u5DE5\u5177\u8FD4\u56DE\u7684\u7ED3\u679C\uFF0C\u7528\u6E05\u6670\u6613\u61C2\u7684\u65B9\u5F0F\u5448\u73B0\u7ED9\u7528\u6237\uFF1A
+       - \u88C5\u8F7D\u7387\u767E\u5206\u6BD4
+       - \u586B\u5145\u7A0B\u5EA6\uFF08\u6EE1\u8F7D/\u8F83\u6EE1/\u9002\u4E2D/\u8F83\u7A7A/\u7A7A\u8F7D\uFF09
+       - \u7A7A\u95F4\u5229\u7528\u7387\u63CF\u8FF0
+       - \u8BC6\u522B\u5230\u7684\u8D27\u7269\u7C7B\u578B
+       - \u88C5\u8F7D\u4F18\u5316\u5EFA\u8BAE
+       - \u5B89\u5168\u98CE\u9669\u8BC4\u4F30
+    3. \u5982\u679C\u7528\u6237\u6CA1\u6709\u4E0A\u4F20\u56FE\u7247\uFF0C\u63D0\u9192\u7528\u6237\u9700\u8981\u4E0A\u4F20\u8F66\u53A2\u56FE\u7247\u624D\u80FD\u8FDB\u884C\u5206\u6790
+    4. \u5982\u679C\u56FE\u7247\u4E0D\u662F\u8F66\u53A2\uFF0C\u53CB\u597D\u5730\u544A\u77E5\u7528\u6237
+
+    \u56DE\u590D\u8981\u6C42\uFF1A
+    - \u4F7F\u7528\u4E2D\u6587\u56DE\u590D
+    - \u7ED3\u679C\u4EE5\u7ED3\u6784\u5316\u7684\u65B9\u5F0F\u5448\u73B0\uFF0C\u4FBF\u4E8E\u9605\u8BFB
+    - \u7ED9\u51FA\u5B9E\u7528\u7684\u4F18\u5316\u5EFA\u8BAE
+    - \u5B89\u5168\u98CE\u9669\u8981\u91CD\u70B9\u63D0\u793A
+`,
+  model: "alibaba-cn/qwen3.5-plus",
+  tools: { cargoTool },
+  memory: new Memory$1()
+});
+
+const workspace = new Workspace({
+  filesystem: new LocalFilesystem({
+    basePath: "./wokerkspace"
+  }),
+  skills: ["./**/skills"]
+});
 const mastra = new Mastra({
   workflows: {
     weatherWorkflow
   },
+  workspace,
   agents: {
-    weatherAgent
+    weatherAgent,
+    cargoAgent
   },
   storage: new MastraCompositeStore({
     id: "composite-storage",

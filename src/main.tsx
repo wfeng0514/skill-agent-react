@@ -5,7 +5,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Agent from './pages/Agent';
 import './index.css';
-import './styles/global.scss';
+// import './styles/global.scss';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

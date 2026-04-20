@@ -1,4 +1,4 @@
-// ===== 全局样式重置 + 基础 =====
+// ===== 全局样式重置 + 基础（白色主题） =====
 @use 'variables' as *;
 @use 'mixins' as *;
 
@@ -33,7 +33,7 @@ html {
 
 body {
   font-family: $font-sans;
-  background-color: $bg-dark;
+  background-color: #fff;
   color: $text-primary;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -57,17 +57,17 @@ body {
 
 // ===== 选择文本 =====
 ::selection {
-  background: rgba($primary, 0.4);
-  color: #fff;
+  background: rgba($primary, 0.2);
+  color: $text-primary;
 }
 
 a {
-  color: $primary-light;
+  color: $primary;
   text-decoration: none;
   transition: color 0.2s;
 
   &:hover {
-    color: #fff;
+    color: $primary-light;
   }
 }
 
@@ -80,22 +80,15 @@ code {
   font-family: $font-mono;
   font-size: 0.9em;
   padding: 2px 6px;
-  background: rgba($primary, 0.15);
+  background: rgba($primary, 0.08);
   border-radius: $radius-sm;
-  color: $primary-light;
-
-  // 不覆盖 Tailwind/shadcn 组件内的 code 样式
-  :where(.dark) & {
-    background: transparent;
-    padding: 0;
-    color: inherit;
-  }
+  color: $primary;
 }
 
 pre code {
   display: block;
   padding: $spacing-md;
-  background: rgba($bg-elevated, 0.8);
+  background: $bg-elevated;
   border-radius: $radius-md;
   overflow-x: auto;
 }

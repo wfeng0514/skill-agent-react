@@ -5,6 +5,7 @@
   padding: $spacing-2xl $spacing-lg;
   border-top: 1px solid $border-color;
   text-align: center;
+  background: #fff;
 }
 
 .inner {
@@ -16,7 +17,7 @@
     font-size: 0.92rem;
 
     strong {
-      color: #fff;
+      color: $text-primary;
     }
   }
 }
@@ -36,13 +37,13 @@
     font-size: 13px;
     padding: 6px 16px;
     border-radius: 100px;
-    background: rgba(255, 255, 255, 0.04);
+    background: $bg-card;
     transition: all 0.22s ease;
     color: $text-muted;
 
     &:hover {
-      background: rgba($primary, 0.1);
-      color: #fff;
+      background: rgba($primary, 0.06);
+      color: $primary;
     }
   }
 }

@@ -8,11 +8,12 @@
 }
 
 .altBg {
-  background: rgba($bg-card, 0.4);
+  background: $bg-card;
   max-width: none;
   width: calc(100% - ($spacing-lg * 2));
   margin-left: auto;
   margin-right: auto;
+  border-radius: $radius-lg;
 }
 
 .header {
@@ -27,9 +28,9 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #f39c12;
-    background: rgba(#f39c12, 0.1);
-    border: 1px solid rgba(#f39c12, 0.15);
+    color: #e67e22;
+    background: rgba(#e67e22, 0.06);
+    border: 1px solid rgba(#e67e22, 0.1);
     margin-bottom: $spacing-md;
   }
 
@@ -38,6 +39,7 @@
     font-weight: 800;
     letter-spacing: -0.02em;
     margin-bottom: $spacing-md;
+    color: $text-primary;
   }
 
   .desc {
@@ -86,23 +88,23 @@
   border-radius: 100px;
   font-size: 13px;
   font-weight: 500;
-  background: rgba(0, 0, 0, 0.25);
+  background: $bg-elevated;
   color: $text-secondary;
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.22s ease;
 
   &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
+    background: $bg-hover;
+    color: $text-primary;
     border-color: $border-light;
   }
 
   &.active {
-    background: rgba($primary, 0.15);
-    color: #fff;
-    border-color: $primary;
-    box-shadow: 0 2px 10px rgba($primary, 0.15);
+    background: rgba($primary, 0.08);
+    color: $primary;
+    border-color: rgba($primary, 0.2);
+    box-shadow: 0 2px 10px rgba($primary, 0.08);
   }
 
   &:disabled {
@@ -114,10 +116,10 @@
 .textarea {
   width: 100%;
   padding: $spacing-md;
-  background: rgba(0, 0, 0, 0.35);
+  background: #fff;
   border: 1px solid $border-color;
   border-radius: $radius-md;
-  color: #fff;
+  color: $text-primary;
   font-family: $font-mono;
   font-size: 13px;
   line-height: 1.65;
@@ -127,7 +129,7 @@
 
   &:focus {
     border-color: $primary;
-    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+    box-shadow: 0 0 0 3px rgba($primary, 0.08);
   }
 
   &:disabled {
@@ -159,8 +161,8 @@
 
   &:hover:not(:disabled) {
     box-shadow:
-      0 4px 20px rgba($secondary, 0.35),
-      0 0 40px rgba($secondary, 0.1);
+      0 4px 20px rgba($secondary, 0.25),
+      0 0 40px rgba($secondary, 0.06);
     transform: translateY(-2px);
   }
 
@@ -197,13 +199,14 @@
   align-items: center;
   justify-content: space-between;
   padding: $spacing-md $spacing-lg;
-  background: rgba(0, 0, 0, 0.3);
+  background: $bg-card;
   border-bottom: 1px solid $border-color;
 }
 
 .outputTitle {
   font-weight: 700;
   font-size: 14px;
+  color: $text-primary;
 }
 
 .statusBadge {
@@ -215,13 +218,13 @@
   letter-spacing: 0.05em;
 
   &.active {
-    background: rgba($secondary, 0.15);
+    background: rgba($secondary, 0.08);
     color: $secondary;
     animation: badge-blink 1s ease-in-out infinite;
   }
 
   &.done {
-    background: rgba(#27ae60, 0.15);
+    background: rgba(#27ae60, 0.08);
     color: #27ae60;
   }
 }
@@ -238,31 +241,16 @@
 
 .outputLine {
   padding: 4px 0;
-  border-bottom: 1px solid rgba(#fff, 0.02);
+  border-bottom: 1px solid $border-color;
   animation: logAppear 0.25s ease both;
   white-space: pre-wrap;
   word-break: break-all;
 
-  &.step {
-    color: $text-secondary;
-  }
-  &.skill {
-    color: $secondary;
-    font-weight: 600;
-  }
-  &.tool {
-    color: $accent;
-  }
-  &.result {
-    color: #27ae60;
-    font-weight: 700;
-    padding-top: $spacing-md;
-    font-size: 14px;
-  }
-  &.empty {
-    color: $text-muted;
-    font-style: italic;
-  }
+  &.step { color: $text-secondary; }
+  &.skill { color: $secondary; font-weight: 600; }
+  &.tool { color: $accent; }
+  &.result { color: #27ae60; font-weight: 700; padding-top: $spacing-md; font-size: 14px; }
+  &.empty { color: $text-muted; font-style: italic; }
 }
 
 // ===== 底部提示 =====
@@ -271,7 +259,7 @@
   margin-top: $spacing-2xl;
   padding: $spacing-xl;
   border-radius: $radius-lg;
-  background: rgba(0, 0, 0, 0.2);
+  background: $bg-card;
 
   p {
     color: $text-muted;
@@ -285,29 +273,17 @@
 
 // ===== 动画 =====
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes btn-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.85;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
 }
 
 @keyframes badge-blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
 @keyframes slideUpFade {

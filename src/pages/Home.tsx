@@ -5,10 +5,12 @@ import RelationSection from '../components/RelationSection';
 import PlaygroundSection from '../components/PlaygroundSection';
 import Footer from '../components/Footer';
 
+import styles from './Home.module.scss';
+
 const Home: React.FC = () => {
   return (
-    <div className="app">
-      <main>
+    <div className={styles.home}>
+      <main className={styles.main}>
         <Hero />
         <SkillSection />
         <AgentSection />
