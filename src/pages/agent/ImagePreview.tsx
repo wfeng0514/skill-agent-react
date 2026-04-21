@@ -54,20 +54,3 @@ export const MessageImage: React.FC<{ src: string }> = ({ src }) => {
     </>
   );
 };
-
-// ── 输入框上方的图片预览卡片 ──
-
-export const ImagePreviewCard: React.FC<{
-  previewUrl: string;
-  onRemove: () => void;
-}> = ({ previewUrl, onRemove }) => (
-  <div className={styles.imagePreview}>
-    <img src={previewUrl} alt="待上传图片" className={styles.imagePreviewImg} />
-    <div className={styles.imagePreviewInfo}>
-      <span className={styles.imagePreviewName}>已选择图片</span>
-      <button className={styles.imagePreviewRemove} onClick={onRemove}>
-        移除
-      </button>
-    </div>
-  </div>
-);

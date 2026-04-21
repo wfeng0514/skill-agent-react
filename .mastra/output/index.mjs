@@ -9,7 +9,7 @@ import { createWorkflow, createStep } from '@mastra/core/workflows';
 import z$2, { z } from 'zod';
 import { Agent, MessageList, isSupportedLanguageModel, tryGenerateWithJsonFallback, tryStreamWithJsonFallback } from '@mastra/core/agent';
 import { Memory as Memory$1 } from '@mastra/memory';
-import { weatherTool } from './tools/65ee3292-da82-433a-b9ba-ca21991cdcd3.mjs';
+import { weatherTool } from './tools/d137c210-0f3c-44e8-830e-a0e3863c42e0.mjs';
 import { chatRoute } from '@mastra/ai-sdk';
 import { Workspace, LocalFilesystem, LocalSkillSource } from '@mastra/core/workspace';
 import { mkdtemp, rm, readFile, writeFile, mkdir, copyFile, readdir, stat } from 'fs/promises';

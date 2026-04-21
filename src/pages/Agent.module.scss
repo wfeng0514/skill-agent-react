@@ -1,7 +1,7 @@
 @use "../styles/variables" as *;
 
 .agentPage {
-  height: calc(100vh - 52px);
+  height: calc(100vh - 66px);
   display: flex;
   flex-direction: row;
   background-color: #fff;
@@ -10,54 +10,183 @@
 
 // ── 侧边栏 ──
 
-.sidebarHeader {
-  padding: 20px 16px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.sidebarLogo {
-  font-size: 22px;
-}
-
 .sidebar {
+  width: 240px;
   flex-shrink: 0;
   background: $bg-card;
   border-right: 1px solid $border-color;
-  padding: $spacing-md * 2 $spacing-md $spacing-md;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  overflow: hidden;
 }
 
-.sidebarTitle {
-  font-size: 12px;
-  font-weight: 700;
-  color: $text-muted;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.agentList {
+// Agent 切换 — 缩小
+.sidebarAgents {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 0 $spacing-sm;
+  gap: 4px;
+  padding: 10px 12px;
+  border-bottom: 1px solid $border-color;
 }
 
 .agentItem {
+  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: $spacing-sm;
-  padding: 10px $spacing-md;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 8px;
   border-radius: $radius-sm;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: $text-secondary;
   cursor: pointer;
   transition: all 0.2s ease;
+  border: none;
+  background: none;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:hover {
+    background: $bg-hover;
+    color: $text-primary;
+  }
+}
+
+.agentItemActive {
+  background: rgba($primary, 0.12);
+  color: $primary;
+  font-weight: 600;
+
+  &:hover {
+    background: rgba($primary, 0.18);
+    color: $primary;
+  }
+}
+
+.agentIcon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.agentItemLabel {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 新对话按钮 — 缩小
+.newChatBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 12px 6px;
+  padding: 6px 12px;
+  border-radius: $radius-sm;
+  font-size: 12px;
+  font-weight: 500;
+  color: $primary;
+  background: none;
+  border: 1px dashed rgba($primary, 0.35);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  svg {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    background: rgba($primary, 0.06);
+    border-color: rgba($primary, 0.6);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// 历史会话列表
+.sessionList {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px 8px;
+}
+
+.sessionListHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.clearAllBtn {
+  font-size: 11px;
+  color: $text-muted;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+
+  &:hover {
+    color: #ef4444;
+    background: #fff5f5;
+  }
+}
+
+.sessionEmpty {
+  text-align: center;
+  padding: 24px 16px;
+  font-size: 12px;
+  color: $text-muted;
+}
+
+.sessionItems {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.sessionItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: $radius-sm;
+  font-size: 12px;
+  color: $text-secondary;
+  cursor: pointer;
+  transition: all 0.15s ease;
   border: none;
   background: none;
   width: 100%;
@@ -69,19 +198,83 @@
   }
 }
 
-.agentItemActive {
-  background: rgba($primary, 0.06);
-  color: $primary;
-  font-weight: 600;
+.sessionItemActive {
+  background: rgba($primary, 0.12) !important;
+  color: $primary !important;
 
-  &:hover {
-    background: rgba($primary, 0.1);
+  .sessionItemTitle {
     color: $primary;
+    font-weight: 500;
   }
 }
 
-.agentIcon {
-  font-size: 16px;
+.sessionItemContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.sessionItemIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 13px;
+}
+
+.sessionItemText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.sessionItemTitle {
+  font-size: 12px;
+  line-height: 1.3;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sessionItemMeta {
+  font-size: 10px;
+  color: $text-muted;
+  line-height: 1;
+}
+
+.sessionItemDelete {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: $text-muted;
+  transition: all 0.15s ease;
+  line-height: 1;
+
+  &:hover {
+    color: #ef4444;
+    background: #fff5f5;
+  }
+}
+
+// 底部
+.sidebarFooter {
+  padding: 8px 16px;
+  border-top: 1px solid $border-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebarVersion {
+  font-size: 11px;
+  color: $text-muted;
 }
 
 // ── 主内容区 ──
@@ -105,11 +298,6 @@
   font-weight: 700;
   color: $text-primary;
   margin-bottom: 2px;
-}
-
-.subtitle {
-  font-size: 13px;
-  color: $text-muted;
 }
 
 .chatContainer {
@@ -195,30 +383,33 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
   background: transparent;
-  border: 1px dashed $border-color;
+  border: none;
   cursor: pointer;
   color: $text-muted;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   flex-shrink: 0;
-  position: relative;
 
   &:hover {
-    background: $bg-card;
-    border-color: $primary;
     color: $primary;
+    background: rgba($primary, 0.08);
   }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.92);
   }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
+
+    &:hover {
+      color: $text-muted;
+      background: transparent;
+    }
   }
 }
 
@@ -230,56 +421,111 @@
   overflow: hidden;
 }
 
-// ── 图片上传预览卡片 ──
+// ── 输入框内图片预览（内部上方） ──
 
-.imagePreview {
-  display: flex;
+.imageBubble {
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  gap: $spacing-sm;
-  padding: $spacing-sm $spacing-md;
-  background: $bg-card;
-  border: 1px solid $border-color;
-  border-radius: $radius-sm;
-  margin-bottom: $spacing-sm;
+  gap: 8px;
+  padding: 6px 8px 6px 6px;
+  margin-bottom: 4px;
+  margin-right: auto;
+  background: #f1f5f9;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  max-width: 100%;
+
+  &:hover {
+    background: #e2e8f0;
+    border-color: $primary;
+
+    .imageBubbleClose {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }
 
-.imagePreviewImg {
-  width: 48px;
-  height: 48px;
+.imageBubbleThumb {
+  width: 40px;
+  height: 40px;
   object-fit: cover;
-  border-radius: $radius-sm;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
 }
 
-.imagePreviewInfo {
+.imageBubbleClose {
+  position: static;
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
-  flex: 1;
-  min-width: 0;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: #94a3b8;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.15s ease;
+  padding: 0;
+  flex-shrink: 0;
+
+  &:hover {
+    background: #ef4444;
+    transform: scale(1.1);
+  }
 }
 
-.imagePreviewName {
-  font-size: 13px;
-  color: $text-secondary;
+.imageBubbleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.imageBubbleName {
+  font-size: 12px;
+  color: $text-primary;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 180px;
 }
 
-.imagePreviewRemove {
-  font-size: 12px;
-  color: $text-muted;
-  cursor: pointer;
-  padding: 2px 8px;
-  border: none;
-  background: none;
-  border-radius: 4px;
-  transition: all 0.15s ease;
-  white-space: nowrap;
+.imageBubbleHint {
+  font-size: 10px;
+  color: #94a3b8;
+}
 
-  &:hover {
-    color: #e74c3c;
-    background: rgba(#e74c3c, 0.06);
+// ── 历史加载状态 ──
+
+.historyLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 40px 0;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.historyLoadingSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e2e8f0;
+  border-top-color: $primary;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

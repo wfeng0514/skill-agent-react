@@ -6,39 +6,61 @@ import type { AgentConfig } from './config';
 import { ChatMessages } from './ChatMessages';
 import { ChatInput } from './ChatInput';
 import { useImageUpload } from './useImageUpload';
+import { useChatHistory } from './useChatHistory';
 
 import styles from '../Agent.module.scss';
 
 interface ChatPanelProps {
   agent: AgentConfig;
+  sessionId: string;
+  onHistoryChange: () => void;
 }
 
 /**
  * 聊天面板 — useChat + 消息列表 + 输入区
- * 通过 key={agentId} 在切换时完全重新挂载，确保 transport 正确
+ * 通过 key={sessionId} 在切换/新建时完全重新挂载，确保 initialMessages 生效
  */
-export const ChatPanel: React.FC<ChatPanelProps> = ({ agent }) => {
-  const { pendingFilePart, pendingImagePreview, fileInputRef, handleImageUpload, clearImage } =
+export const ChatPanel: React.FC<ChatPanelProps> = ({ agent, sessionId, onHistoryChange }) => {
+  const { pendingFilePart, pendingImagePreview, pendingFileName, fileInputRef, handleImageUpload, clearImage } =
     useImageUpload();
 
-  const { messages, sendMessage, status, stop } = useChat({
-    id: agent.id,
-    transport: new DefaultChatTransport({
-      api: agent.apiPath,
-    }),
+  const { initialMessages, loaded, persist } = useChatHistory(agent.id, sessionId);
+
+  // 等 IndexedDB 加载完再初始化 useChat，避免用空 initialMessages
+  const { messages, setMessages, sendMessage, status, stop } = useChat({
+    id: `${agent.id}-${sessionId}`,
+    initialMessages: loaded ? initialMessages : [],
+    transport: new DefaultChatTransport({ api: agent.apiPath }),
   });
+
+  // 强制同步 initialMessages → useChat 内部状态
+  React.useEffect(() => {
+    if (loaded && initialMessages.length > 0 && messages.length === 0) {
+      setMessages(initialMessages);
+    }
+  }, [loaded, initialMessages, messages.length, setMessages]);
 
   const isLoading = status === 'submitted' || status === 'streaming';
 
+  // 每次 messages 变化时持久化 + 通知父组件刷新历史列表
+  const prevCountRef = React.useRef(0);
+  React.useEffect(() => {
+    if (messages.length > 0) {
+      persist(messages);
+      if (messages.length !== prevCountRef.current) {
+        prevCountRef.current = messages.length;
+        onHistoryChange();
+      }
+    }
+  }, [messages, persist, onHistoryChange]);
+
   // 提交消息
-  const handleSubmit = async ({ text }: { text: string }) => {
+  const handleSubmit = ({ text }: { text: string }) => {
     const trimmed = text.trim();
 
-    // 如果有待发送的图片，使用 files 参数发送多模态消息
     if (pendingFilePart) {
-      const messageText = trimmed || '请分析这张车厢图片的装载率';
       sendMessage({
-        text: messageText,
+        text: trimmed || '请分析这张车厢图片的装载率',
         files: [pendingFilePart as FileUIPart],
       });
       clearImage();
@@ -51,7 +73,15 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ agent }) => {
 
   return (
     <div className={styles.chatContainer}>
-      <ChatMessages messages={messages} isLoading={isLoading} />
+      {/* 等待 IndexedDB 加载完成 */}
+      {!loaded && (
+        <div className={styles.historyLoading}>
+          <div className={styles.historyLoadingSpinner} />
+          <span>加载对话记录...</span>
+        </div>
+      )}
+
+      <ChatMessages messages={loaded ? messages : []} isLoading={isLoading && loaded} />
 
       {/* 隐藏的文件选择 input */}
       <input
@@ -67,6 +97,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ agent }) => {
         status={status}
         onStop={stop}
         pendingImagePreview={pendingImagePreview}
+        pendingFileName={pendingFileName}
         onRemoveImage={clearImage}
         onUploadClick={() => fileInputRef.current?.click()}
         onSubmit={handleSubmit}

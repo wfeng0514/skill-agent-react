@@ -7,6 +7,7 @@ import type { FileUIPart } from 'ai';
 export function useImageUpload() {
   const [pendingFilePart, setPendingFilePart] = useState<FileUIPart | null>(null);
   const [pendingImagePreview, setPendingImagePreview] = useState<string | null>(null);
+  const [pendingFileName, setPendingFileName] = useState<string | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +28,7 @@ export function useImageUpload() {
     reader.onload = () => {
       const dataUrl = reader.result as string;
       setPendingImagePreview(dataUrl);
+      setPendingFileName(file.name);
       setPendingFilePart({
         type: 'file',
         mediaType: file.type,
@@ -42,11 +44,13 @@ export function useImageUpload() {
   const clearImage = useCallback(() => {
     setPendingFilePart(null);
     setPendingImagePreview(null);
+    setPendingFileName(undefined);
   }, []);
 
   return {
     pendingFilePart,
     pendingImagePreview,
+    pendingFileName,
     fileInputRef,
     handleImageUpload,
     clearImage,
