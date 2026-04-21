@@ -9,10 +9,10 @@ const Footer: React.FC = () => (
         <span className={styles.highlight}>React + TypeScript + SCSS + Vite</span> 构建
       </p>
       <div className={styles.links}>
-        <a href="#skill">📦 Skill</a>
-        <a href="#agent">🤖 Agent</a>
-        <a href="#relation">🔗 关系</a>
-        <a href="#playground">🧪 实验场</a>
+        <button type="button" onClick={() => document.getElementById('skill')?.scrollIntoView({ behavior: 'smooth' })}>📦 Skill</button>
+        <button type="button" onClick={() => document.getElementById('agent')?.scrollIntoView({ behavior: 'smooth' })}>🤖 Agent</button>
+        <button type="button" onClick={() => document.getElementById('relation')?.scrollIntoView({ behavior: 'smooth' })}>🔗 关系</button>
+        <button type="button" onClick={() => document.getElementById('playground')?.scrollIntoView({ behavior: 'smooth' })}>🧪 实验场</button>
       </div>
       <p className={styles.copyright}>Made with 🐾 by 狗子</p>
     </div>

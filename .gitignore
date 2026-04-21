@@ -23,3 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+
+# Mastra 数据库文件
+*.duckdb
+*.duckdb.wal
+*.db
+*.db-wal
+*.db-shm

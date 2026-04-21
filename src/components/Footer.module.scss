@@ -33,11 +33,14 @@
   gap: $spacing-md;
   margin: $spacing-md 0;
 
-  a {
+  button {
+    font-family: inherit;
     font-size: 13px;
     padding: 6px 16px;
     border-radius: 100px;
     background: $bg-card;
+    border: none;
+    cursor: pointer;
     transition: all 0.22s ease;
     color: $text-muted;
 

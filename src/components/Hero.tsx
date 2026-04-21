@@ -24,12 +24,20 @@ const Hero: React.FC = () => {
       </p>
 
       <div className={styles.actions}>
-        <a href="#skill" className={`${styles.btn} ${styles.btnPrimary}`}>
+        <button
+          type="button"
+          className={`${styles.btn} ${styles.btnPrimary}`}
+          onClick={() => document.getElementById('skill')?.scrollIntoView({ behavior: 'smooth' })}
+        >
           开始学习 ↓
-        </a>
-        <a href="#playground" className={`${styles.btn} ${styles.btnOutline}`}>
+        </button>
+        <button
+          type="button"
+          className={`${styles.btn} ${styles.btnOutline}`}
+          onClick={() => document.getElementById('playground')?.scrollIntoView({ behavior: 'smooth' })}
+        >
           🧪 直接实验
-        </a>
+        </button>
       </div>
 
       <div className={styles.scrollHint}>
