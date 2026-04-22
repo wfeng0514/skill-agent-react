@@ -56,83 +56,88 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
 
   return (
     <aside className={styles.sidebar}>
-      {/* ── Agent 切换区域 ── */}
-      <div className={styles.sidebarAgents}>
-        {agents.map((agent) => (
-          <button
-            key={agent.id}
-            className={`${styles.agentItem} ${agent.id === activeAgentId ? styles.agentItemActive : ''}`}
-            onClick={() => onSwitchAgent(agent.id)}
-            title={agent.label}
-          >
-            <span className={styles.agentIcon}>{agent.icon}</span>
-            <span className={styles.agentItemLabel}>{agent.label}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* ── 新对话按钮 ── */}
-      <button className={styles.newChatBtn} onClick={onNewSession}>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M12 5v14M5 12h14" />
-        </svg>
-        <span>新对话</span>
-      </button>
-
-      {/* ── 历史会话列表 ── */}
-      <div className={styles.sessionList}>
-        <div className={styles.sessionListHeader}>
-          <span>历史会话</span>
-          {sessions.length > 0 && (
-            <button className={styles.clearAllBtn} onClick={handleClearAll} title="清空所有历史">
-              清空
+      <div className={styles.sidebarContent}>
+        {/* ── Agent 切换区域 ── */}
+        <div className={styles.sidebarAgents}>
+          {agents.map((agent) => (
+            <button
+              key={agent.id}
+              className={`${styles.agentItem} ${agent.id === activeAgentId ? styles.agentItemActive : ''}`}
+              onClick={() => onSwitchAgent(agent.id)}
+              title={agent.label}
+            >
+              <span className={styles.agentIcon}>{agent.icon}</span>
+              <span className={styles.agentItemLabel}>{agent.label}</span>
             </button>
-          )}
+          ))}
         </div>
 
-        {sessions.length === 0 ? (
-          <div className={styles.sessionEmpty}>暂无历史会话</div>
-        ) : (
-          <div className={styles.sessionItems}>
-            {sessions.map((session) => (
-              <button
-                key={session.id}
-                className={`${styles.sessionItem} ${session.id === activeSessionId ? styles.sessionItemActive : ''}`}
-                onClick={() => onSwitchSession(session.id)}
-                onMouseEnter={() => setHoveredSession(session.id)}
-                onMouseLeave={() => setHoveredSession(null)}
-              >
-                <div className={styles.sessionItemContent}>
-                  <span className={styles.sessionItemIcon}>💬</span>
-                  <div className={styles.sessionItemText}>
-                    <span className={styles.sessionItemTitle}>{session.title}</span>
-                    <span className={styles.sessionItemMeta}>
-                      {formatTime(session.timestamp)} · {session.messageCount} 条
-                    </span>
-                  </div>
-                </div>
-                {(hoveredSession === session.id || session.id === activeSessionId) && (
-                  <span
-                    className={styles.sessionItemDelete}
-                    onClick={(e) => handleDeleteSession(e, session.id)}
-                    title="删除此会话"
+        {/* ── 历史会话区域 ── */}
+        <div className={styles.sidebarSessions}>
+          {/* ── 新对话按钮 ── */}
+          <button className={styles.newChatBtn} onClick={onNewSession}>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            <span>新对话</span>
+          </button>
+
+          {/* ── 历史会话列表 ── */}
+          <div className={styles.sessionList}>
+            <div className={styles.sessionListHeader}>
+              <span>历史会话</span>
+              {sessions.length > 0 && (
+                <button className={styles.clearAllBtn} onClick={handleClearAll} title="清空所有历史">
+                  清空
+                </button>
+              )}
+            </div>
+
+            {sessions.length === 0 ? (
+              <div className={styles.sessionEmpty}>暂无历史会话</div>
+            ) : (
+              <div className={styles.sessionItems}>
+                {sessions.map((session) => (
+                  <button
+                    key={session.id}
+                    className={`${styles.sessionItem} ${session.id === activeSessionId ? styles.sessionItemActive : ''}`}
+                    onClick={() => onSwitchSession(session.id)}
+                    onMouseEnter={() => setHoveredSession(session.id)}
+                    onMouseLeave={() => setHoveredSession(null)}
                   >
-                    ×
-                  </span>
-                )}
-              </button>
-            ))}
+                    <div className={styles.sessionItemContent}>
+                      <span className={styles.sessionItemIcon}>💬</span>
+                      <div className={styles.sessionItemText}>
+                        <span className={styles.sessionItemTitle}>{session.title}</span>
+                        <span className={styles.sessionItemMeta}>
+                          {formatTime(session.timestamp)} · {session.messageCount} 条
+                        </span>
+                      </div>
+                    </div>
+                    {(hoveredSession === session.id || session.id === activeSessionId) && (
+                      <span
+                        className={styles.sessionItemDelete}
+                        onClick={(e) => handleDeleteSession(e, session.id)}
+                        title="删除此会话"
+                      >
+                        ×
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* ── 底部信息 ── */}

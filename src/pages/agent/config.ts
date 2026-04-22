@@ -28,4 +28,20 @@ export const AGENTS: AgentConfig[] = [
     placeholder: '上传车厢图片，分析装载率...',
     supportsImage: true,
   },
+  {
+    id: 'mcp-agent',
+    label: 'Mastra 框架技术专家',
+    icon: '🔗',
+    apiPath: 'http://localhost:4111/chat/mcp-agent',
+    placeholder: '询问 Mastra 框架相关问题...',
+    supportsImage: false,
+  },
+  {
+    id: 'music-agent',
+    label: '网易云音乐助手',
+    icon: '🎵',
+    apiPath: 'http://localhost:4111/chat/music-agent',
+    placeholder: '询问音乐相关问题...',
+    supportsImage: false,
+  },
 ];

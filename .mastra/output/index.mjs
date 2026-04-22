@@ -5,11 +5,17 @@ import { LibSQLStore } from '@mastra/libsql';
 import { DuckDBStore } from '@mastra/duckdb';
 import { MastraCompositeStore, tracesFilterSchema, paginationArgsSchema as paginationArgsSchema$1, tracesOrderBySchema, dateRangeSchema as dateRangeSchema$1, listTracesResponseSchema, getTraceResponseSchema, getTraceArgsSchema, scoreTracesResponseSchema, scoreTracesRequestSchema, spanIdsSchema, InMemoryStore } from '@mastra/core/storage';
 import { Observability, SensitiveDataFilter, DefaultExporter, CloudExporter } from '@mastra/observability';
+import { MastraEditor } from '@mastra/editor';
 import { createWorkflow, createStep } from '@mastra/core/workflows';
 import z$2, { z } from 'zod';
 import { Agent, MessageList, isSupportedLanguageModel, tryGenerateWithJsonFallback, tryStreamWithJsonFallback } from '@mastra/core/agent';
 import { Memory as Memory$1 } from '@mastra/memory';
-import { weatherTool } from './tools/d137c210-0f3c-44e8-830e-a0e3863c42e0.mjs';
+import { weatherTool } from './tools/514a2f16-076c-42b2-acee-6a019509ea44.mjs';
+import { MCPClient, MCPServer } from '@mastra/mcp';
+import { searchMusicTool } from './tools/b09ac857-5327-4d56-9ac2-17cbb1c91bbe.mjs';
+import { getLyricsTool } from './tools/69bae419-66b3-4b53-bdac-166b74d877ea.mjs';
+import { getArtistSongsTool } from './tools/2ceaea73-8e16-4943-84f5-78eabdd5a47c.mjs';
+import { getMusicUrlTool } from './tools/2b7b0bc6-3bf2-4fbe-8227-bf0b8329a395.mjs';
 import { chatRoute } from '@mastra/ai-sdk';
 import { Workspace, LocalFilesystem, LocalSkillSource } from '@mastra/core/workspace';
 import { mkdtemp, rm, readFile, writeFile, mkdir, copyFile, readdir, stat } from 'fs/promises';
@@ -222,6 +228,7 @@ const weatherAgent = new Agent({
 const cargoAgent = new Agent({
   id: "cargo-agent",
   name: "Cargo Loading Agent",
+  description: "\u4E00\u4E2A\u4E13\u4E1A\u7684\u8D27\u8FD0\u88C5\u8F7D\u7387\u5206\u6790\u52A9\u624B\uFF0C\u80FD\u591F\u5206\u6790\u8F66\u53A2\u56FE\u7247\u4E2D\u7684\u88C5\u8F7D\u60C5\u51B5\uFF0C\u63D0\u4F9B\u88C5\u8F7D\u7387\u3001\u7A7A\u95F4\u5229\u7528\u7387\u3001\u8D27\u7269\u7C7B\u578B\u8BC6\u522B\u548C\u4F18\u5316\u5EFA\u8BAE",
   instructions: `
     \u4F60\u662F\u4E00\u4E2A\u4E13\u4E1A\u7684\u8D27\u8FD0\u88C5\u8F7D\u7387\u5206\u6790\u52A9\u624B\u3002\u7528\u6237\u4F1A\u4E0A\u4F20\u8F66\u53A2\u56FE\u7247\uFF0C\u4F60\u9700\u8981\u76F4\u63A5\u5206\u6790\u56FE\u7247\u4E2D\u7684\u88C5\u8F7D\u60C5\u51B5\u3002
 
@@ -256,6 +263,124 @@ const cargoAgent = new Agent({
   memory: new Memory$1()
 });
 
+const mcpClient = new MCPClient({
+  id: "mcp-client",
+  servers: {
+    /**
+     *  Mastra 官方文档 MCP
+     */
+    mastra: {
+      command: "npx",
+      args: ["-y", "@mastra/mcp-docs-server"],
+      env: {
+        DOCS_CACHE_TTL: "3600",
+        // 缓存1小时
+        EXAMPLES_REFRESH: "daily"
+      }
+    },
+    /**
+     * 食谱 MCP
+     */
+    howtocook: {
+      command: "npx",
+      args: ["-y", "howtocook-mcp"]
+    },
+    /**
+     * 美国天气 MCP
+     */
+    weather: {
+      url: new URL(
+        `https://server.smithery.ai/@smithery-ai/national-weather-service/mcp?api_key=${process.env.SMITHERY_API_KEY}`
+      )
+    }
+  }
+});
+
+const mcpAgent = new Agent({
+  id: "mcp-agent",
+  name: "MCP Agent",
+  description: "\u4E00\u4E2A\u96C6\u6210\u591A\u4E2A MCP \u670D\u52A1\u7684\u4E13\u5BB6 Agent\uFF0C\u80FD\u591F\u67E5\u8BE2 Mastra \u6587\u6863\u3001\u63D0\u4F9B\u98DF\u8C31\u5EFA\u8BAE\u548C\u83B7\u53D6\u5929\u6C14\u4FE1\u606F",
+  instructions: `
+      \u4F60\u662F\u4E00\u4E2A\u517C\u5177\u591A\u9879\u80FD\u529B\u7684\u4E13\u5BB6 Agent\uFF0C\u96C6\u6210\u4E86\u4E09\u4E2A\u6838\u5FC3 MCP \u80FD\u529B\uFF1A
+      ## \u{1F3AF} \u4F60\u7684\u80FD\u529B\u77E9\u9635
+
+      ### 1\uFE0F\u20E3 Mastra \u6846\u67B6\u6280\u672F\u5B98\u65B9\u6587\u6863\u67E5\u8BE2\uFF08mastra-mcp\uFF09
+      - \u5B9E\u65F6\u67E5\u8BE2 Mastra \u6700\u65B0\u6587\u6863
+      - \u83B7\u53D6 API \u4F7F\u7528\u793A\u4F8B
+      - \u4E86\u89E3\u6846\u67B6\u66F4\u65B0\u548C\u6700\u4F73\u5B9E\u8DF5
+
+      ### 2\uFE0F\u20E3 \u98DF\u8C31\u52A9\u624B\uFF08howtocook-mcp\uFF09
+      - \u63D0\u4F9B\u83DC\u8C31\u67E5\u8BE2\u548C\u63A8\u8350
+      - \u70F9\u996A\u6B65\u9AA4\u6307\u5BFC
+      - \u98DF\u6750\u6E05\u5355\u751F\u6210
+
+      ### 3\uFE0F\u20E3 \u5929\u6C14\u670D\u52A1\uFF08weather-mcp\uFF09
+      - \u7F8E\u56FD\u5730\u533A\u5929\u6C14\u67E5\u8BE2
+      - \u6C14\u6E29\u3001\u98CE\u901F\u3001\u6E7F\u5EA6\u7B49\u5B9E\u65F6\u6570\u636E
+      - \u5929\u6C14\u9884\u62A5\u548C\u5929\u6C14\u9884\u8B66
+      
+      ## \u{1F3AF} \u7EA6\u675F
+      - \u53EA\u80FD\u4F7F\u7528 MCP \u63D0\u4F9B\u7684\u5DE5\u5177\u6765\u56DE\u7B54\u95EE\u9898
+      - \u4E0D\u8981\u7F16\u9020\u4FE1\u606F\uFF0C\u5982\u679C\u5DE5\u5177\u65E0\u6CD5\u63D0\u4F9B\u7B54\u6848\uFF0C\u5C31\u8BF4\u4E0D\u77E5\u9053
+      - \u56DE\u590D\u8981\u53CB\u597D\u3001\u8BE6\u7EC6\uFF0C\u7528\u4E2D\u6587\u56DE\u7B54
+
+      ## \u{1F3AF} \u76EE\u6807
+      - \u6210\u4E3A\u7528\u6237\u7684\u5168\u80FD\u52A9\u624B\uFF0C\u63D0\u4F9B\u51C6\u786E\u3001\u5B9E\u7528\u7684\u4FE1\u606F\u548C\u5EFA\u8BAE
+  `,
+  model: "alibaba-cn/qwen3.5-plus",
+  tools: await mcpClient.listTools()
+});
+
+const musicAgent = new Agent({
+  id: "music-agent",
+  name: "\u7F51\u6613\u4E91\u97F3\u4E50\u52A9\u624B",
+  description: "\u4E00\u4E2A\u4E13\u4E1A\u7684\u97F3\u4E50\u52A9\u624B\uFF0C\u5E2E\u52A9\u7528\u6237\u5904\u7406\u97F3\u4E50\u76F8\u5173\u7684\u8BF7\u6C42\uFF0C\u652F\u6301\u641C\u7D22\u6B4C\u66F2\u3001\u83B7\u53D6\u6B4C\u8BCD\u3001\u67E5\u770B\u6B4C\u624B\u4F5C\u54C1\u548C\u83B7\u53D6\u64AD\u653E\u94FE\u63A5",
+  instructions: `
+    \u4F60\u662F\u4E00\u4E2A\u4E13\u4E1A\u7684\u97F3\u4E50\u52A9\u624B\uFF0C\u5E2E\u52A9\u7528\u6237\u5904\u7406\u97F3\u4E50\u76F8\u5173\u7684\u8BF7\u6C42\u3002
+    
+    \u4F60\u53EF\u4EE5\uFF1A
+    - \u641C\u7D22\u6B4C\u66F2\uFF1A\u4F7F\u7528 search-music \u5DE5\u5177
+    - \u83B7\u53D6\u6B4C\u8BCD\uFF1A\u4F7F\u7528 get-lyrics \u5DE5\u5177  
+    - \u67E5\u770B\u6B4C\u624B\u4F5C\u54C1\uFF1A\u4F7F\u7528 get-artist-songs \u5DE5\u5177
+    - \u83B7\u53D6\u64AD\u653E\u94FE\u63A5\uFF1A\u4F7F\u7528 get-music-url \u5DE5\u5177
+    
+    \u6839\u636E\u7528\u6237\u7684\u95EE\u9898\uFF0C\u9009\u62E9\u5408\u9002\u7684\u5DE5\u5177\u6765\u56DE\u7B54\u3002
+    \u56DE\u590D\u8981\u53CB\u597D\u3001\u8BE6\u7EC6\uFF0C\u7528\u4E2D\u6587\u56DE\u7B54\u3002
+    
+    ## \u56FE\u7247\u663E\u793A\u89C4\u5219
+    \u5F53\u8FD4\u56DE\u6B4C\u66F2\u5C01\u9762\u6216\u6D77\u62A5\u65F6\uFF0C\u8BF7\u4F7F\u7528\u4EE5\u4E0B HTML/Markdown \u683C\u5F0F\u63A7\u5236\u5927\u5C0F\uFF1A
+    
+    ### Markdown \u683C\u5F0F\uFF08\u63A8\u8350\uFF09\uFF1A
+    ![\u6B4C\u66F2\u5C01\u9762](\u56FE\u7247URL =200x200)
+    
+    \u6216\u4F7F\u7528 HTML \u683C\u5F0F\uFF1A
+    <img src="\u56FE\u7247URL" width="200" height="200" style="max-width: 200px; border-radius: 8px;" />
+    
+    ### \u91CD\u8981\uFF1A
+    - \u6240\u6709\u56FE\u7247\u5BBD\u5EA6\u5FC5\u987B\u63A7\u5236\u5728 200px \u4EE5\u5185
+    - \u4FDD\u6301\u56FE\u7247\u6BD4\u4F8B\uFF0C\u4E0D\u8981\u53D8\u5F62
+    - \u5982\u679C\u6709\u591A\u5F20\u56FE\u7247\uFF0C\u6BCF\u5F20\u90FD\u8981\u8BBE\u7F6E\u5927\u5C0F
+    - \u4E0D\u8981\u8FD4\u56DE\u539F\u59CB\u5927\u5C0F\u7684\u56FE\u7247
+  `,
+  model: "alibaba-cn/qwen3.5-plus",
+  tools: {
+    searchMusicTool,
+    getLyricsTool,
+    getArtistSongsTool,
+    getMusicUrlTool
+  },
+  memory: new Memory$1()
+});
+
+const musicMCPServer = new MCPServer({
+  name: "music-service",
+  version: "1.0.0",
+  description: "\u7F51\u6613\u4E91\u97F3\u4E50 MCP \u670D\u52A1\uFF0C\u63D0\u4F9B\u641C\u7D22\u3001\u6B4C\u8BCD\u3001\u6B4C\u66F2\u4FE1\u606F\u548C\u64AD\u653E\u94FE\u63A5",
+  agents: { musicAgent },
+  tools: { searchMusicTool, getLyricsTool, getArtistSongsTool, getMusicUrlTool }
+});
+await musicMCPServer.startStdio();
+
 const workspace = new Workspace({
   filesystem: new LocalFilesystem({
     basePath: "./wokerkspace"
@@ -267,10 +392,15 @@ const mastra = new Mastra({
   workflows: {
     weatherWorkflow
   },
+  mcpServers: {
+    musicMCPServer
+  },
   workspace,
   agents: {
     weatherAgent,
-    cargoAgent
+    cargoAgent,
+    mcpAgent,
+    musicAgent
   },
   storage: new MastraCompositeStore({
     id: "composite-storage",
@@ -303,6 +433,7 @@ const mastra = new Mastra({
       }
     }
   }),
+  editor: new MastraEditor(),
   server: {
     apiRoutes: [chatRoute({
       path: "/chat/:agentId"

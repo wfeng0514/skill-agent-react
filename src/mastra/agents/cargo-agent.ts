@@ -4,6 +4,8 @@ import { Memory } from '@mastra/memory';
 export const cargoAgent = new Agent({
   id: 'cargo-agent',
   name: 'Cargo Loading Agent',
+  description:
+    '一个专业的货运装载率分析助手，能够分析车厢图片中的装载情况，提供装载率、空间利用率、货物类型识别和优化建议',
   instructions: `
     你是一个专业的货运装载率分析助手。用户会上传车厢图片，你需要直接分析图片中的装载情况。
 

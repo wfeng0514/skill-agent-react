@@ -11,7 +11,7 @@
 // ── 侧边栏 ──
 
 .sidebar {
-  width: 240px;
+  // width: 240px;
   flex-shrink: 0;
   background: $bg-card;
   border-right: 1px solid $border-color;
@@ -20,246 +20,260 @@
   overflow: hidden;
 }
 
-// Agent 切换 — 缩小
+.sidebarContent {
+  display: flex;
+  height: 100%;
+}
+
+// Agents
 .sidebarAgents {
   display: flex;
+  flex-direction: column;
   gap: 4px;
   padding: 10px 12px;
-  border-bottom: 1px solid $border-color;
-}
-
-.agentItem {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 6px 8px;
-  border-radius: $radius-sm;
-  font-size: 12px;
-  font-weight: 500;
-  color: $text-secondary;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  background: none;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-
-  &:hover {
-    background: $bg-hover;
-    color: $text-primary;
-  }
-}
-
-.agentItemActive {
-  background: rgba($primary, 0.12);
-  color: $primary;
-  font-weight: 600;
-
-  &:hover {
-    background: rgba($primary, 0.18);
-    color: $primary;
-  }
-}
-
-.agentIcon {
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.agentItemLabel {
-  font-size: 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-// 新对话按钮 — 缩小
-.newChatBtn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 8px 12px 6px;
-  padding: 6px 12px;
-  border-radius: $radius-sm;
-  font-size: 12px;
-  font-weight: 500;
-  color: $primary;
-  background: none;
-  border: 1px dashed rgba($primary, 0.35);
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  svg {
-    flex-shrink: 0;
-    width: 14px;
-    height: 14px;
-  }
-
-  &:hover {
-    background: rgba($primary, 0.06);
-    border-color: rgba($primary, 0.6);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-// 历史会话列表
-.sessionList {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 0 8px 8px;
-}
-
-.sessionListHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 4px 6px;
-  font-size: 11px;
-  font-weight: 600;
-  color: $text-muted;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.clearAllBtn {
-  font-size: 11px;
-  color: $text-muted;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all 0.15s ease;
-
-  &:hover {
-    color: #ef4444;
-    background: #fff5f5;
-  }
-}
-
-.sessionEmpty {
-  text-align: center;
-  padding: 24px 16px;
-  font-size: 12px;
-  color: $text-muted;
-}
-
-.sessionItems {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding-right: 4px;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 2px;
+  border-right: 1px solid $border-color;
+  .agentItem {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    // justify-content: center;
+    gap: 4px;
+    padding: 6px 8px;
+    border-radius: $radius-sm;
+    font-size: 12px;
+    font-weight: 500;
+    color: $text-secondary;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    background: none;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.2);
+      background: $bg-hover;
+      color: $text-primary;
     }
   }
-}
 
-.sessionItem {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 8px;
-  border-radius: $radius-sm;
-  font-size: 12px;
-  color: $text-secondary;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-
-  &:hover {
-    background: $bg-hover;
-    color: $text-primary;
+  .agentIcon {
+    font-size: 14px;
+    flex-shrink: 0;
   }
-}
 
-.sessionItemActive {
-  background: rgba($primary, 0.12) !important;
-  color: $primary !important;
-
-  .sessionItemTitle {
+  .agentItemActive {
+    background: rgba($primary, 0.12);
     color: $primary;
-    font-weight: 500;
+    font-weight: 600;
+
+    &:hover {
+      background: rgba($primary, 0.18);
+      color: $primary;
+    }
+  }
+
+  .agentItemLabel {
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
-.sessionItemContent {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  flex: 1;
-  min-width: 0;
-}
-
-.sessionItemIcon {
-  flex-shrink: 0;
-  margin-top: 1px;
-  font-size: 13px;
-}
-
-.sessionItemText {
+// Sessions
+.sidebarSessions {
+  width: 200px;
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
+  gap: 8px;
+  padding: 10px 0;
 
-.sessionItemTitle {
-  font-size: 12px;
-  line-height: 1.3;
-  color: inherit;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+  // 新对话按钮 — 缩小
+  .newChatBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 8px 12px 6px;
+    padding: 6px 12px;
+    border-radius: $radius-sm;
+    font-size: 12px;
+    font-weight: 500;
+    color: $primary;
+    background: none;
+    border: 1px dashed rgba($primary, 0.35);
+    cursor: pointer;
+    transition: all 0.2s ease;
 
-.sessionItemMeta {
-  font-size: 10px;
-  color: $text-muted;
-  line-height: 1;
-}
+    svg {
+      flex-shrink: 0;
+      width: 14px;
+      height: 14px;
+    }
 
-.sessionItemDelete {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  font-size: 13px;
-  color: $text-muted;
-  transition: all 0.15s ease;
-  line-height: 1;
+    &:hover {
+      background: rgba($primary, 0.06);
+      border-color: rgba($primary, 0.6);
+    }
 
-  &:hover {
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // 历史会话列表
+  .sessionList {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0 8px 8px;
+  }
+
+  .sessionListHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 4px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .clearAllBtn {
+    font-size: 11px;
     color: #ef4444;
-    background: #fff5f5;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: #fff5f5;
+    }
+  }
+
+  .sessionEmpty {
+    text-align: center;
+    padding: 24px 16px;
+    font-size: 12px;
+    color: $text-muted;
+  }
+
+  .sessionItems {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding-right: 4px;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+
+  .sessionItem {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    border-radius: $radius-sm;
+    font-size: 12px;
+    color: $text-secondary;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+
+    &:hover {
+      background: $bg-hover;
+      color: $text-primary;
+    }
+  }
+
+  .sessionItemActive {
+    background: rgba($primary, 0.12) !important;
+    color: $primary !important;
+
+    .sessionItemTitle {
+      color: $primary;
+      font-weight: 500;
+    }
+  }
+
+  .sessionItemContent {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sessionItemIcon {
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 13px;
+  }
+
+  .sessionItemText {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .sessionItemTitle {
+    font-size: 10px;
+    line-height: 1.3;
+    color: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sessionItemMeta {
+    font-size: 10px;
+    color: $text-muted;
+    line-height: 1;
+  }
+
+  .sessionItemDelete {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: $text-muted;
+    transition: all 0.15s ease;
+    line-height: 1;
+
+    &:hover {
+      color: #ef4444;
+      background: #fff5f5;
+    }
   }
 }
 

@@ -16,6 +16,8 @@ const Agent: React.FC = () => {
   const [sessionIds, setSessionIds] = React.useState<Record<string, string>>(() => ({
     'cargo-agent': newSessionId(),
     'weather-agent': newSessionId(),
+    'mcp-agent': newSessionId(),
+    'music-agent': newSessionId(),
   }));
 
   // 历史版本号，每次消息变化或删除时递增，触发侧边栏刷新

@@ -4,13 +4,19 @@ import { LibSQLStore } from '@mastra/libsql';
 import { DuckDBStore } from '@mastra/duckdb';
 import { MastraCompositeStore } from '@mastra/core/storage';
 import { Observability, DefaultExporter, CloudExporter, SensitiveDataFilter } from '@mastra/observability';
+
+import { MastraEditor } from '@mastra/editor';
+
 import { weatherWorkflow } from './workflows/weather-workflow';
 import { weatherAgent } from './agents/weather-agent';
 import { cargoAgent } from './agents/cargo-agent';
+import { mcpAgent } from './agents/mcp-agent';
+import { musicMCPServer } from './mcp/music-server';
 
 import { chatRoute } from '@mastra/ai-sdk';
 
 import { Workspace, LocalFilesystem } from '@mastra/core/workspace';
+import { musicAgent } from './agents/music-agent';
 
 const workspace = new Workspace({
   filesystem: new LocalFilesystem({ basePath: './wokerkspace' }),
@@ -20,8 +26,9 @@ const workspace = new Workspace({
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
+  mcpServers: { musicMCPServer },
   workspace,
-  agents: { weatherAgent, cargoAgent },
+  agents: { weatherAgent, cargoAgent, mcpAgent, musicAgent },
   storage: new MastraCompositeStore({
     id: 'composite-storage',
     default: new LibSQLStore({
@@ -50,6 +57,8 @@ export const mastra = new Mastra({
       },
     },
   }),
+
+  editor: new MastraEditor(),
 
   server: {
     apiRoutes: [
