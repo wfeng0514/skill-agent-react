@@ -31,3 +31,7 @@ dist-ssr
 *.db
 *.db-wal
 *.db-shm
+
+
+.mastra
+.mastra/*

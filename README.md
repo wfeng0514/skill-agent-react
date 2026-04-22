@@ -107,8 +107,11 @@ Step 2: planActivities
 # 安装依赖（首次）
 npm install
 
-# 启动 Mastra 开发服务器（默认监听 http://localhost:4111）
+#启动 web 服务器
 npm run dev
+
+# 启动 Mastra 开发服务器（默认监听 http://localhost:4111）
+npx mastra dev
 ```
 
 启动后可访问：

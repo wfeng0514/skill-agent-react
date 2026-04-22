@@ -262,6 +262,7 @@ const weatherAgent = new Agent({
 const cargoAgent = new Agent({
   id: "cargo-agent",
   name: "Cargo Loading Agent",
+  description: "\u4E00\u4E2A\u4E13\u4E1A\u7684\u8D27\u8FD0\u88C5\u8F7D\u7387\u5206\u6790\u52A9\u624B\uFF0C\u80FD\u591F\u5206\u6790\u8F66\u53A2\u56FE\u7247\u4E2D\u7684\u88C5\u8F7D\u60C5\u51B5\uFF0C\u63D0\u4F9B\u88C5\u8F7D\u7387\u3001\u7A7A\u95F4\u5229\u7528\u7387\u3001\u8D27\u7269\u7C7B\u578B\u8BC6\u522B\u548C\u4F18\u5316\u5EFA\u8BAE",
   instructions: `
     \u4F60\u662F\u4E00\u4E2A\u4E13\u4E1A\u7684\u8D27\u8FD0\u88C5\u8F7D\u7387\u5206\u6790\u52A9\u624B\u3002\u7528\u6237\u4F1A\u4E0A\u4F20\u8F66\u53A2\u56FE\u7247\uFF0C\u4F60\u9700\u8981\u76F4\u63A5\u5206\u6790\u56FE\u7247\u4E2D\u7684\u88C5\u8F7D\u60C5\u51B5\u3002
 
@@ -545,6 +546,7 @@ const getMusicUrl = async (songName, artist) => {
 const musicAgent = new Agent({
   id: "music-agent",
   name: "\u7F51\u6613\u4E91\u97F3\u4E50\u52A9\u624B",
+  description: "\u4E00\u4E2A\u4E13\u4E1A\u7684\u97F3\u4E50\u52A9\u624B\uFF0C\u5E2E\u52A9\u7528\u6237\u5904\u7406\u97F3\u4E50\u76F8\u5173\u7684\u8BF7\u6C42\uFF0C\u652F\u6301\u641C\u7D22\u6B4C\u66F2\u3001\u83B7\u53D6\u6B4C\u8BCD\u3001\u67E5\u770B\u6B4C\u624B\u4F5C\u54C1\u548C\u83B7\u53D6\u64AD\u653E\u94FE\u63A5",
   instructions: `
     \u4F60\u662F\u4E00\u4E2A\u4E13\u4E1A\u7684\u97F3\u4E50\u52A9\u624B\uFF0C\u5E2E\u52A9\u7528\u6237\u5904\u7406\u97F3\u4E50\u76F8\u5173\u7684\u8BF7\u6C42\u3002
     
@@ -593,9 +595,10 @@ await musicMCPServer.startStdio();
 
 const workspace = new Workspace({
   filesystem: new LocalFilesystem({
-    basePath: "./wokerkspace"
+    basePath: "./wokerkspace",
+    contained: false
   }),
-  skills: ["./**/skills"],
+  skills: ["./**/skills", "./**/my-skills"],
   bm25: true
 });
 const mastra = new Mastra({
@@ -634,11 +637,33 @@ const mastra = new Mastra({
           new DefaultExporter(),
           // Persists traces to storage for Mastra Studio
           new CloudExporter()
-          // Sends observability data to hosted Mastra Studio (if MASTRA_CLOUD_ACCESS_TOKEN is set)
+          // 将可观测性数据发送至托管的 Mastra Studio（若已设置 MASTRA_CLOUD_ACCESS_TOKEN）
         ],
         spanOutputProcessors: [
-          new SensitiveDataFilter()
-          // Redacts sensitive data like passwords, tokens, keys
+          // 处理诸如密码、令牌、密钥等敏感数据
+          new SensitiveDataFilter({
+            // Add custom sensitive fields
+            sensitiveFields: [
+              // Default fields
+              "password",
+              "token",
+              "secret",
+              "key",
+              "apikey",
+              // Custom fields for your application
+              "creditCard",
+              "bankAccount",
+              "routingNumber",
+              "email",
+              "phoneNumber",
+              "dateOfBirth"
+            ],
+            // Custom redaction token
+            redactionToken: "***SENSITIVE***",
+            // Redaction style
+            redactionStyle: "full"
+            // or 'partial'
+          })
         ]
       }
     }

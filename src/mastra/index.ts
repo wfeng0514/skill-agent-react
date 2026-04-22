@@ -19,8 +19,8 @@ import { Workspace, LocalFilesystem } from '@mastra/core/workspace';
 import { musicAgent } from './agents/music-agent';
 
 const workspace = new Workspace({
-  filesystem: new LocalFilesystem({ basePath: './wokerkspace' }),
-  skills: ['./**/skills'],
+  filesystem: new LocalFilesystem({ basePath: './wokerkspace', contained: false }),
+  skills: ['./**/skills', './**/my-skills'],
   bm25: true,
 });
 
@@ -49,10 +49,32 @@ export const mastra = new Mastra({
         serviceName: 'mastra',
         exporters: [
           new DefaultExporter(), // Persists traces to storage for Mastra Studio
-          new CloudExporter(), // Sends observability data to hosted Mastra Studio (if MASTRA_CLOUD_ACCESS_TOKEN is set)
+          new CloudExporter(), // 将可观测性数据发送至托管的 Mastra Studio（若已设置 MASTRA_CLOUD_ACCESS_TOKEN）
         ],
         spanOutputProcessors: [
-          new SensitiveDataFilter(), // Redacts sensitive data like passwords, tokens, keys
+          // 处理诸如密码、令牌、密钥等敏感数据
+          new SensitiveDataFilter({
+            // Add custom sensitive fields
+            sensitiveFields: [
+              // Default fields
+              'password',
+              'token',
+              'secret',
+              'key',
+              'apikey',
+              // Custom fields for your application
+              'creditCard',
+              'bankAccount',
+              'routingNumber',
+              'email',
+              'phoneNumber',
+              'dateOfBirth',
+            ],
+            // Custom redaction token
+            redactionToken: '***SENSITIVE***',
+            // Redaction style
+            redactionStyle: 'full', // or 'partial'
+          }),
         ],
       },
     },

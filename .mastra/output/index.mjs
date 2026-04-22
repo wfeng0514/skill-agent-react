@@ -10,12 +10,12 @@ import { createWorkflow, createStep } from '@mastra/core/workflows';
 import z$2, { z } from 'zod';
 import { Agent, MessageList, isSupportedLanguageModel, tryGenerateWithJsonFallback, tryStreamWithJsonFallback } from '@mastra/core/agent';
 import { Memory as Memory$1 } from '@mastra/memory';
-import { weatherTool } from './tools/514a2f16-076c-42b2-acee-6a019509ea44.mjs';
+import { weatherTool } from './tools/ab124ee5-5126-462f-bf38-d937b50f3c00.mjs';
 import { MCPClient, MCPServer } from '@mastra/mcp';
-import { searchMusicTool } from './tools/b09ac857-5327-4d56-9ac2-17cbb1c91bbe.mjs';
-import { getLyricsTool } from './tools/69bae419-66b3-4b53-bdac-166b74d877ea.mjs';
-import { getArtistSongsTool } from './tools/2ceaea73-8e16-4943-84f5-78eabdd5a47c.mjs';
-import { getMusicUrlTool } from './tools/2b7b0bc6-3bf2-4fbe-8227-bf0b8329a395.mjs';
+import { searchMusicTool } from './tools/840b0d01-f722-41df-91cd-b526cb68ecae.mjs';
+import { getLyricsTool } from './tools/1643ac3c-037d-466a-9e73-189811bf996c.mjs';
+import { getArtistSongsTool } from './tools/1b781677-0d62-4cf7-8807-bf2ddd99694d.mjs';
+import { getMusicUrlTool } from './tools/89a54ae3-fef3-4e48-b647-3fadaa1050f8.mjs';
 import { chatRoute } from '@mastra/ai-sdk';
 import { Workspace, LocalFilesystem, LocalSkillSource } from '@mastra/core/workspace';
 import { mkdtemp, rm, readFile, writeFile, mkdir, copyFile, readdir, stat } from 'fs/promises';
@@ -383,9 +383,10 @@ await musicMCPServer.startStdio();
 
 const workspace = new Workspace({
   filesystem: new LocalFilesystem({
-    basePath: "./wokerkspace"
+    basePath: "./wokerkspace",
+    contained: false
   }),
-  skills: ["./**/skills"],
+  skills: ["./**/skills", "./**/my-skills"],
   bm25: true
 });
 const mastra = new Mastra({
@@ -424,11 +425,33 @@ const mastra = new Mastra({
           new DefaultExporter(),
           // Persists traces to storage for Mastra Studio
           new CloudExporter()
-          // Sends observability data to hosted Mastra Studio (if MASTRA_CLOUD_ACCESS_TOKEN is set)
+          // 将可观测性数据发送至托管的 Mastra Studio（若已设置 MASTRA_CLOUD_ACCESS_TOKEN）
         ],
         spanOutputProcessors: [
-          new SensitiveDataFilter()
-          // Redacts sensitive data like passwords, tokens, keys
+          // 处理诸如密码、令牌、密钥等敏感数据
+          new SensitiveDataFilter({
+            // Add custom sensitive fields
+            sensitiveFields: [
+              // Default fields
+              "password",
+              "token",
+              "secret",
+              "key",
+              "apikey",
+              // Custom fields for your application
+              "creditCard",
+              "bankAccount",
+              "routingNumber",
+              "email",
+              "phoneNumber",
+              "dateOfBirth"
+            ],
+            // Custom redaction token
+            redactionToken: "***SENSITIVE***",
+            // Redaction style
+            redactionStyle: "full"
+            // or 'partial'
+          })
         ]
       }
     }
