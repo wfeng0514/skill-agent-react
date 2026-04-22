@@ -23,5 +23,10 @@ export const weatherAgent = new Agent({
   model: 'zhipuai/glm-4.5-flash',
   tools: { weatherTool },
 
-  memory: new Memory(),
+  memory: new Memory({
+    options: {
+      lastMessages: 10,
+      semanticRecall: false,
+    },
+  }),
 });

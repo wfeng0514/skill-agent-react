@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import type { UIMessage } from 'ai';
 
 const STORAGE_PREFIX = 'chat_history_';
@@ -304,5 +304,3 @@ export function useChatHistory(agentId: string, sessionId: string) {
     clear,
   };
 }
-
-import React from 'react';

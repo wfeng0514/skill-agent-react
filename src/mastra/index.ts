@@ -21,7 +21,7 @@ import { musicAgent } from './agents/music-agent';
 const workspace = new Workspace({
   filesystem: new LocalFilesystem({ basePath: './wokerkspace', contained: false }),
   skills: ['./**/skills', './**/my-skills'],
-  bm25: true,
+  bm25: true, // 开启 BM25 搜索
 });
 
 export const mastra = new Mastra({

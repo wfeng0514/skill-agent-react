@@ -3,6 +3,7 @@
  */
 import { Agent } from '@mastra/core/agent';
 import { mcpClient } from '../mcp/mcp-client';
+import { QWEN35_PLUS } from '../providers/dashscope';
 
 export const mcpAgent = new Agent({
   id: 'mcp-agent',
@@ -35,6 +36,6 @@ export const mcpAgent = new Agent({
       ## 🎯 目标
       - 成为用户的全能助手，提供准确、实用的信息和建议
   `,
-  model: 'alibaba-cn/qwen3.5-plus',
+  model: QWEN35_PLUS,
   tools: await mcpClient.listTools(),
 });

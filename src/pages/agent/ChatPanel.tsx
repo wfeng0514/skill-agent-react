@@ -29,8 +29,13 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({ agent, sessionId, onHistor
   // 等 IndexedDB 加载完再初始化 useChat，避免用空 initialMessages
   const { messages, setMessages, sendMessage, status, stop } = useChat({
     id: `${agent.id}-${sessionId}`,
-    initialMessages: loaded ? initialMessages : [],
-    transport: new DefaultChatTransport({ api: agent.apiPath }),
+    // 新版 AI SDK ChatInit 中用 messages 代替了 initialMessages
+    messages: loaded ? initialMessages : [],
+    transport: new DefaultChatTransport({
+      api: agent.apiPath,
+      // maxSteps 透传给后端 agent.stream() options，防止 tool call 消耗完 steps 后
+      body: { maxSteps: 20 },
+    }),
   });
 
   // 强制同步 initialMessages → useChat 内部状态

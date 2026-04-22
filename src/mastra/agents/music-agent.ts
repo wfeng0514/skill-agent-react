@@ -4,6 +4,7 @@ import { searchMusicTool } from '../tools/search-music';
 import { getLyricsTool } from '../tools/get-lyrics';
 import { getArtistSongsTool } from '../tools/get-artist-songs';
 import { getMusicUrlTool } from '../tools/get-music-url';
+import { QWEN35_PLUS } from '../providers/dashscope';
 
 export const musicAgent = new Agent({
   id: 'music-agent',
@@ -36,7 +37,7 @@ export const musicAgent = new Agent({
     - 如果有多张图片，每张都要设置大小
     - 不要返回原始大小的图片
   `,
-  model: 'alibaba-cn/qwen3.5-plus',
+  model: QWEN35_PLUS,
   tools: {
     searchMusicTool,
     getLyricsTool,
@@ -44,5 +45,10 @@ export const musicAgent = new Agent({
     getMusicUrlTool,
   },
 
-  memory: new Memory(),
+  memory: new Memory({
+    options: {
+      lastMessages: 10,
+      semanticRecall: false,
+    },
+  }),
 });

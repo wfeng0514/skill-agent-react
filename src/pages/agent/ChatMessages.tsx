@@ -55,10 +55,10 @@ export const ChatMessages: React.FC<{
               );
             }
 
-            // ── 工具调用消息 ──
+            // ── 工具调用消息（默认折叠，用户可展开查看详情） ──
             if (part.type?.startsWith('tool-')) {
               return (
-                <Tool key={`${message.id}-${i}`}>
+                <Tool key={`${message.id}-${i}`} defaultOpen={false}>
                   <ToolHeader
                     type={(part as ToolUIPart).type}
                     state={(part as ToolUIPart).state || 'output-available'}
