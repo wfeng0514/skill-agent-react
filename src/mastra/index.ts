@@ -17,6 +17,7 @@ import { chatRoute } from '@mastra/ai-sdk';
 
 import { Workspace, LocalFilesystem } from '@mastra/core/workspace';
 import { musicAgent } from './agents/music-agent';
+import { ragAgent } from './agents/rag-agent';
 
 const workspace = new Workspace({
   filesystem: new LocalFilesystem({ basePath: './wokerkspace', contained: false }),
@@ -28,12 +29,12 @@ export const mastra = new Mastra({
   workflows: { weatherWorkflow },
   mcpServers: { musicMCPServer },
   workspace,
-  agents: { weatherAgent, cargoAgent, mcpAgent, musicAgent },
+  agents: { weatherAgent, cargoAgent, mcpAgent, musicAgent, ragAgent },
   storage: new MastraCompositeStore({
     id: 'composite-storage',
     default: new LibSQLStore({
       id: 'mastra-storage',
-      url: 'file:./mastra.db',
+      url: process.env.MASTRA_DB_URL || 'file:./mastra.db',
     }),
     domains: {
       observability: await new DuckDBStore().getStore('observability'),

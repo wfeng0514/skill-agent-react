@@ -44,4 +44,12 @@ export const AGENTS: AgentConfig[] = [
     placeholder: '询问音乐相关问题...',
     supportsImage: false,
   },
+  {
+    id: 'rag-agent',
+    label: 'RAG 知识库员工手册助手',
+    icon: '📚',
+    apiPath: 'http://localhost:4111/chat/rag-agent',
+    placeholder: '员工手册相关问题...',
+    supportsImage: false,
+  },
 ];

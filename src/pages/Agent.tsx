@@ -18,6 +18,7 @@ const Agent: React.FC = () => {
     'weather-agent': newSessionId(),
     'mcp-agent': newSessionId(),
     'music-agent': newSessionId(),
+    'rag-agent': newSessionId(),
   }));
 
   // 历史版本号，每次消息变化或删除时递增，触发侧边栏刷新

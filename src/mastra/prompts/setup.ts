@@ -1,30 +1,27 @@
 /**
  * Prompt Block 初始化脚本
  *
- * 直接写入 Studio 使用的数据库 (src/mastra/public/mastra.db)。
+ * 直接写入项目根的 mastra.db（与 Mastra Studio 和 mastra dev 共享）。
  * cargo-agent 的 instructions 通过 DynamicArgument 从 DB 动态读取 Block 内容，
  *
  * 幂等脚本：已存在的 Block 会跳过。可安全重复运行。
  * 运行方式：npx tsx src/mastra/prompts/setup.ts
  */
 
+// ⚠️ 必须在所有其他 import 之前设置环境变量
+// 脚本从项目根运行，CWD 是项目根，./mastra.db 正确指向项目根
+process.env.MASTRA_DB_URL = 'file:./mastra.db';
+
+import 'dotenv/config';
 import { Mastra } from '@mastra/core/mastra';
 import { LibSQLStore } from '@mastra/libsql';
 import { MastraEditor } from '@mastra/editor';
-import { resolve } from 'path';
-import { fileURLToPath } from 'url';
-
-// Studio 使用的实际数据库路径
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const DB_PATH = resolve(__dirname, '../public/mastra.db');
 
 async function main() {
-  console.log('📦 数据库路径:', DB_PATH);
-
   const m = new Mastra({
     storage: new LibSQLStore({
       id: 'mastra-storage',
-      url: `file:${DB_PATH}`,
+      url: process.env.MASTRA_DB_URL || 'file:./mastra.db',
     }),
     editor: new MastraEditor(),
   });
