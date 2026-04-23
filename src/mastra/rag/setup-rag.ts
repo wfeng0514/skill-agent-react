@@ -130,8 +130,8 @@ async function setupRAG() {
 
     const chunks = await mdoc.chunk({
       strategy: 'recursive',
-      maxSize: 512,
-      overlap: 50,
+      maxSize: 1024, // 增大 chunk：保留更完整的语义上下文
+      overlap: 200, // 增大 overlap：避免语义截断
     });
     console.log(`   ✂️  切分为 ${chunks.length} 个 chunks`);
 
