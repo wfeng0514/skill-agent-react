@@ -20,9 +20,9 @@
 import 'dotenv/config';
 import { Agent } from '@mastra/core/agent';
 import { createVectorQueryTool } from '@mastra/rag';
-import { ragVectorStore, RAG_INDEX_NAME } from '../vector';
+import { ragVectorStore, RAG_INDEX_NAME } from '../rag/vector';
 import { QWEN35_PLUS } from '../providers/dashscope';
-import { embeddingModel } from '../embedding';
+import { embeddingModel } from '../rag/embedding';
 import { createAnswerRelevancyScorer, createFaithfulnessScorer } from '@mastra/evals/scorers/prebuilt';
 
 /**

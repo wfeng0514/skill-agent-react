@@ -16,7 +16,7 @@ import { readdirSync, readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 
 // 动态 import，确保 MASTRA_DB_URL 已设置
-const { ragVectorStore, RAG_INDEX_NAME } = await import('../vector');
+const { ragVectorStore, RAG_INDEX_NAME } = await import('./vector');
 const { MDocument } = await import('@mastra/rag');
 import OpenAI from 'openai';
 
