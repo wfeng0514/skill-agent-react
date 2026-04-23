@@ -7,36 +7,29 @@ export const cargoAgent = new Agent({
   name: 'Cargo Loading Agent',
   description:
     '一个专业的货运装载率分析助手，能够分析车厢图片中的装载情况，提供装载率、空间利用率、货物类型识别和优化建议',
-  instructions: `
-    你是一个专业的货运装载率分析助手。用户会上传车厢图片，你需要直接分析图片中的装载情况。
+  /**
+   * instructions 使用 DynamicArgument（async 函数），在每次请求时从 mastra.db 动态读取
+   * Prompt Block 内容并拼接，实现在 Mastra Studio (localhost:4111) 修改后立即生效。
+   * 首次使用前需要运行一次初始化脚本（已运行则跳过）：npx tsx src/mastra/prompts/setup.ts
+   */
+  instructions: async ({ mastra }) => {
+    if (!mastra) {
+      return '你是一个专业的货运装载率分析助手。';
+    }
+    const editor = mastra.getEditor();
+    if (!editor) {
+      return '你是一个专业的货运装载率分析助手。';
+    }
+    // 从 DB 读取两个 Prompt Block 并拼接
+    const [rulesBlock, formatBlock] = await Promise.all([
+      editor.prompt.getById('cargo-rules').catch(() => null),
+      editor.prompt.getById('cargo-output-format').catch(() => null),
+    ]);
+    return (
+      [rulesBlock?.content, formatBlock?.content].filter(Boolean).join('\n\n') || '你是一个专业的货运装载率分析助手。'
+    );
+  },
 
-    ## 分析维度（必须全部覆盖）
-    1. **装载率**：估算车厢的装载率百分比（0%-100%）
-    2. **填充程度**：判断为 满载/较满/适中/较空/空载
-    3. **空间利用率**：描述车厢各维度（长/宽/高）的空间利用情况
-    4. **货物类型**：识别车厢中装载的货物类型
-    5. **优化建议**：提供装载优化建议，如何提高空间利用率
-    6. **安全评估**：评估当前装载方式的安全风险
-
-    ## 输出格式（严格遵循）
-    📊 **装载率分析报告**
-    ━━━━━━━━━━━━━━━━━
-    🚛 装载率：XX%
-    📦 填充程度：较满/适中/较空 等
-    📐 空间利用率：详细描述
-    📋 货物类型：识别结果
-    💡 优化建议：具体可操作的建议
-    ⚠️ 安全评估：风险等级和说明
-    ━━━━━━━━━━━━━━━━━
-
-    ## 注意事项
-    - 使用中文回复
-    - 如果用户没有上传图片，提醒用户需要上传车厢图片
-    - 如果图片不是车厢，友好地告知用户
-    - 装载率为估算值，误差约 ±5%
-    - 非货物区域（传送带、通道、人员等）需排除
-    - 安全风险要重点提示，建议要具体可操作
-`,
   model: QWEN35_PLUS,
   memory: new Memory(),
 });
