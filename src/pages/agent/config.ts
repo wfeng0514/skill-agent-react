@@ -30,10 +30,10 @@ export const AGENTS: AgentConfig[] = [
   },
   {
     id: 'mcp-agent',
-    label: 'Mastra 框架技术专家',
+    label: 'MCP 应用助手',
     icon: '🔗',
     apiPath: 'http://localhost:4111/chat/mcp-agent',
-    placeholder: '询问 Mastra 框架相关问题...',
+    placeholder: '询问相关问题...',
     supportsImage: false,
   },
   {

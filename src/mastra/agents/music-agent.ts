@@ -25,14 +25,11 @@ export const musicAgent = new Agent({
     ## 图片显示规则
     当返回歌曲封面或海报时，请使用以下 HTML/Markdown 格式控制大小：
     
-    ### Markdown 格式（推荐）：
-    ![歌曲封面](图片URL =200x200)
-    
-    或使用 HTML 格式：
+    ### HTML 格式（推荐）：
     <img src="图片URL" width="200" height="200" style="max-width: 200px; border-radius: 8px;" />
     
     ### 重要：
-    - 所有图片宽度必须控制在 200px 以内
+    - 所有图片宽度必须控制在 200px 以内，注意排版美观
     - 保持图片比例，不要变形
     - 如果有多张图片，每张都要设置大小
     - 不要返回原始大小的图片

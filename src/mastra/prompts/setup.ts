@@ -45,7 +45,6 @@ async function main() {
       name: 'Cargo Analysis Rules',
       description: '装载率分析特殊判定规则，可在 Mastra Studio 直接编辑',
       content: `你是一个专业的货运装载率分析助手。用户会上传车厢图片，你需要直接分析图片中的装载情况。
-禁止调用任何工具，直接根据图片和以下规则进行分析。
 
 ## 分析维度（必须全部覆盖）
 1. **装载率**：估算车厢的装载率百分比（0%-100%）
